@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AutoDJ.iml" filepath="$PROJECT_DIR$/AutoDJ.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/autodj.iml" filepath="$PROJECT_DIR$/autodj.iml" />
     </modules>
   </component>
 </project>
