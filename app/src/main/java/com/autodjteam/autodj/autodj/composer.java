@@ -1,5 +1,4 @@
 
-
 /**
  * The composer class runs through a loop that queues up sounds for playback by the performer
  * class. This class will run through an algorithm to decide which notes and sounds will be played
@@ -17,7 +16,7 @@ import android.content.Context;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class composer {
+public class Composer {
     private int currentBeat;
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     private double composerCheck; //stores a randomly-generated number for comparison
@@ -27,7 +26,7 @@ public class composer {
     public boolean isPlaying;
     public performer playback;
     
-    public composer(){
+    public Composer(){
         currentBeat = 1;
         currentMeasure = 1;
         parameters = new int[2];
@@ -48,7 +47,7 @@ public class composer {
     //main composition loop
     public void compose(){
     	if (isPlaying) {
-    		new tempoTimer(parameters[0]);
+    		new TempoTimer(parameters[0]);
     	}
         if (currentBeat == 1){ 
         	updateParameters(); //if we are on the downbeat of a measure, update composition parameters
@@ -126,10 +125,10 @@ public class composer {
      * Helper Class tempoTimer allows the composer to halt for the time in between beats
      * creating a rhythm for composition and playback
      */
-    public class tempoTimer {
+    public class TempoTimer {
     	Timer timer; 
     	
-    	public tempoTimer(int tempo) {
+    	public TempoTimer(int tempo) {
     		timer = new Timer();
     		timer.schedule(new ComposerTask(), 60000/tempo);
     	}
