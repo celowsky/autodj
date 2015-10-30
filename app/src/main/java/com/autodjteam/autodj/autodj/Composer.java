@@ -1,19 +1,32 @@
-
-/**
- * The composer class runs through a loop that queues up sounds for playback by the performer
- * class. This class will run through an algorithm to decide which notes and sounds will be played
- * on the next beat
- *
- * NOTES FOR NEXT MEETING:
- *
- *     LOADING SOUNDS: time how long startup takes when loading each sound individually
- *     using raw commands. If it takes a while, try storing each of the file ids in an
- *     array and using that instead!
- */
 package com.autodjteam.autodj.autodj;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import java.util.Random;
 
-public class composer {
+public class Composer extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        String tempo = intent.getStringExtra(MainActivity.EXTRA_TEMPO);
+        setContentView(R.layout.activity_main);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+    }
 
     private int currentBeat;
     private double composerCheck; //stores a randomly-generated number for comparison
@@ -24,7 +37,7 @@ public class composer {
     public boolean isPlaying;
     public performer playback;
 
-    public composer(){
+    public Composer(){
         currentBeat = 1;
         parameters = new int[2];
         parameters[0] = 120; //default tempo
@@ -32,7 +45,6 @@ public class composer {
         probabilities = new double[10];
         isPlaying = false;
         randy = new Random();
-
     }
 
     //methods
