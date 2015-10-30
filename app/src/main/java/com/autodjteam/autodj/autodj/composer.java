@@ -17,7 +17,7 @@ import android.content.Context;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public static class composer {
+public class composer {
     private int currentBeat;
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     private double composerCheck; //stores a randomly-generated number for comparison
