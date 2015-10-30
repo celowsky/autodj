@@ -22,20 +22,16 @@ public class composer {
     private Random randy;
     public int[] parameters; //array of composition parameters
     public int[] sounds;
-    public double[] probabilities; //list of music event probabilities
     public boolean isPlaying;
     public performer playback;
-    Timer timer;
     
     public composer(){
         currentBeat = 1;
         parameters = new int[2];
         parameters[0] = 120; //default tempo
         parameters[1] = 50; //default offbeat check
-        probabilities = new double[10];
         isPlaying = false;
         randy = new Random();
-        timer = new Timer();
     }
 
     //methods
