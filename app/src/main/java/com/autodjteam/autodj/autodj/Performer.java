@@ -1,3 +1,5 @@
+package com.autodjteam.autodj.autodj;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -11,9 +13,6 @@ import android.media.SoundPool;
 class, metronome.performer, manages the loading and playback of sound. It will be included
  * in the primary composition loop and used to queue playback.
  */
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.SoundPool;
 public class Performer {
     private Context localContext;
     private SoundPool soundBank; //this SoundPool holds all the sounds currently used by AutoDJ

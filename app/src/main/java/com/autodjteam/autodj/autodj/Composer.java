@@ -10,22 +10,44 @@
  *     using raw commands. If it takes a while, try storing each of the file ids in an
  *     array and using that instead!
  */
-import java.util.Random;
-import android.content.Context;
+package com.autodjteam.autodj.autodj;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Composer {
+public class Composer extends AppCompatActivity{
+
     private int currentBeat;
+
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     private double composerCheck; //stores a randomly-generated number for comparison
     private Random randy;
     public int[] parameters; //array of composition parameters
     public int[] sounds;
     public boolean isPlaying;
-    public performer playback;
-    
+    public Performer playback;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });*/
+	}
+
     public Composer(){
         currentBeat = 1;
         currentMeasure = 1;
@@ -119,6 +141,10 @@ public class Composer {
         if (isPlaying)
         	compose();
     }
+
+	public void playPause(View view) {
+		playPause();
+	}
     
     /* helper Classes go here
      * 
