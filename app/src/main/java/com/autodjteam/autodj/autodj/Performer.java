@@ -20,7 +20,7 @@ public class Performer {
         soundBank = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         soundBank.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             public void onLoadComplete(SoundPool soundPool, int mySoundId, int status) {
-                soundPool.play(mySoundId, 1, 1, 1, 0, 1);
+
             }
         }
         );
