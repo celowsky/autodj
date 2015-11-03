@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
+import android.widget.SeekBar;
 
 import java.util.Random;
 import java.util.Timer;
@@ -33,11 +34,17 @@ public class Composer extends AppCompatActivity{
     public int[] sounds;
     public boolean isPlaying;
     public Performer playback;
+	public SeekBar tempoSeekBar;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+
+
+		tempoSeekBar = (SeekBar) findViewById(R.id.seekBar);
+		//tempoSeekBar.setOnSeekBarChangeListener(blah);
+
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,10 +75,10 @@ public class Composer extends AppCompatActivity{
 
     //loads all sounds in the library on startup
     public void onStartup(){
-		sounds[0] = playback.load("res/raw/bassdrum1");
-		sounds[1] = playback.load("res/raw/snare1");
-		sounds[2] = playback.load("res/raw/hihat1");
-		sounds[3] = playback.load("res/raw/crash1");
+		sounds[0] = playback.load("/res/raw/bassdrum1.mp3");
+		sounds[1] = playback.load("/res/raw/snare1.mp3");
+		sounds[2] = playback.load("/res/raw/hihat1.mp3");
+		sounds[3] = playback.load("/res/raw/crash1.mp3");
 	}
 
     //main composition loop
@@ -137,10 +144,13 @@ public class Composer extends AppCompatActivity{
     //Updates composition parameters based on current slider values
     public void updateParameters () {
     	//Method for changing parameters to current slider values goes here
-    	
+		int tempo = tempoSeekBar.getProgress();
+		parameters[0]=tempoTransform(tempo);
     	//so: set parameters[0] (tempo parameter) equal to tempo slider's current value.
     }
-    
+    public int tempoTransform(int tempo){
+		return 2*tempo+60;
+	}
     //on a press of the play/pause button, playPause toggles the parameter
     //that specifies whether or not the composer is playing music
     //between 0 and 1

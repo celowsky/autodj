@@ -16,6 +16,7 @@
         android:layout_width="200dp"
         android:layout_above="@+id/textView"
         android:layout_centerHorizontal="true"
+        android:max="90"
         android:id="@+id/seekBar"
          />
 
