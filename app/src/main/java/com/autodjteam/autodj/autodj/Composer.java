@@ -38,7 +38,6 @@ public class Composer extends AppCompatActivity{
     //public Performer playback;
 	public SeekBar tempoSeekBar;
 	public SoundPool soundPool;
-	//public int sound;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
