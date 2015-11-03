@@ -18,6 +18,13 @@ public class Performer {
     private SoundPool soundBank; //this SoundPool holds all the sounds currently used by AutoDJ
     public Performer(){ //default constructor
         soundBank = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        soundBank.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            public void onLoadComplete(SoundPool soundPool, int mySoundId, int status) {
+                soundPool.play(mySoundId, 1, 1, 1, 0, 1);
+            }
+        }
+        );
+
     }
     public Performer(Context appContext){ //constructor for the SoundPlayback object
         soundBank = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
@@ -25,11 +32,12 @@ public class Performer {
     }
     //Methods
     //performer.load(id) Loads a sound and makes it ready for playback
-    public int load(int id){
-        return soundBank.load(localContext, id, 1);
+    public int load(String filePath){
+        return soundBank.load(filePath, 1);
     }
     //performer.play(id) plays a sound back based on its current id.
     public void play(int id){
         soundBank.play(id,1,1,1,0,1);
     }
+
 }

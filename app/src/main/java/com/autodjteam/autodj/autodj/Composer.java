@@ -12,8 +12,10 @@
  */
 package com.autodjteam.autodj.autodj;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.View;
 
 import java.util.Random;
@@ -35,6 +37,7 @@ public class Composer extends AppCompatActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,19 +55,24 @@ public class Composer extends AppCompatActivity{
         currentBeat = 1;
         currentMeasure = 1;
         parameters = new int[2];
+		sounds = new int[4];
         parameters[0] = 120; //default tempo
         parameters[1] = 50; //default offbeat check
         isPlaying = false;
         randy = new Random();
+		playback = new Performer();
+		onStartup();
     }
 
     //methods
 
     //loads all sounds in the library on startup
     public void onStartup(){
-        //load sounds (currently four sounds planned)
-        //playback.load(alskdjflasd)
-    }
+		sounds[0] = playback.load("res/raw/bassdrum1");
+		sounds[1] = playback.load("res/raw/snare1");
+		sounds[2] = playback.load("res/raw/hihat1");
+		sounds[3] = playback.load("res/raw/crash1");
+	}
 
     //main composition loop
     public void compose(){
@@ -91,8 +99,8 @@ public class Composer extends AppCompatActivity{
 			    playback.play(sounds[1]); //snare drum (ABSOLUTELY must play on "2 and 4!")
 			}
 			
-			if (currentBeat%2 == 0)
-				playback.play(sounds[2]); //offbeat hi-hat cymbal hits
+			if (currentBeat%2 == 1)
+				playback.play(sounds[2]); //hi-hat cymbal hits
 			
 			if (currentBeat%2 == 0 && (int) composerCheck < parameters[1]){
 			    playback.play(sounds[1]); //offbeat snare hits, occuring infrequently
@@ -156,7 +164,7 @@ public class Composer extends AppCompatActivity{
     	
     	public TempoTimer(int tempo) {
     		timer = new Timer();
-    		timer.schedule(new ComposerTask(), 60000/tempo);
+    		timer.schedule(new ComposerTask(), 15000/tempo);
     	}
     	class ComposerTask extends TimerTask {
     		public void run() {
