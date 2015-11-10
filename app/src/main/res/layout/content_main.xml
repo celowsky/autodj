@@ -14,18 +14,17 @@
     <SeekBar
         android:layout_height="wrap_content"
         android:layout_width="200dp"
-        android:layout_above="@+id/textView"
+        android:layout_above="@+id/tempoTextView"
         android:layout_centerHorizontal="true"
         android:max="90"
-        android:id="@+id/seekBar"
-         />
+        android:id="@+id/seekBar" />
 
 
-    <TextView android:text="Tempo" android:layout_width="wrap_content"
+    <TextView android:text="Tempo: 60" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView" />
+        android:id="@+id/tempoTextView" />
 
 
     <Button

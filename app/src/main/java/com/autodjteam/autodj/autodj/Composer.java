@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.util.Random;
 import java.util.Timer;
@@ -45,7 +46,22 @@ public class Composer extends AppCompatActivity{
 		new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "User"));
 
 		tempoSeekBar = (SeekBar) findViewById(R.id.seekBar);
-		//tempoSeekBar.setOnSeekBarChangeListener(blah);
+		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+                TextView tempoTextView = (TextView)findViewById(R.id.tempoTextView);
+                tempoTextView.setText(String.valueOf("Tempo: " + tempoTransform(progress)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
 		soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
 		//sound = soundPool.load(this, R.raw.bassdrum1, 1);
@@ -63,6 +79,8 @@ public class Composer extends AppCompatActivity{
             }
         });*/
 	}
+
+
 
     public Composer(){
         currentBeat = 1;
