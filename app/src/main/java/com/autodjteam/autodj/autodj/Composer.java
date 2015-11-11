@@ -37,7 +37,10 @@ public class Composer extends AppCompatActivity{
     public boolean isPlaying;
     //public Performer playback;
 	public SeekBar tempoSeekBar;
+	public SeekBar complexitySeekBar;
+	public SeekBar rageSeekBar;
 	public SoundPool soundPool;
+
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,21 +49,57 @@ public class Composer extends AppCompatActivity{
 
 		tempoSeekBar = (SeekBar) findViewById(R.id.tempoSeekBar);
 		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
-                TextView tempoTextView = (TextView)findViewById(R.id.tempoTextView);
-                tempoTextView.setText(String.valueOf("Tempo: " + tempoTransform(progress)));
-            }
+			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+				TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
+				tempoTextView.setText(String.valueOf("Tempo: " + tempoTransform(progress)));
+			}
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+			}
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
+			}
+		});
+
+		complexitySeekBar = (SeekBar) findViewById(R.id.complexitySeekBar);
+		complexitySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+				TextView complexityTextView = (TextView)findViewById(R.id.complexityTextView);
+				complexityTextView.setText(String.valueOf("Complexity: " + progress));
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+
+		rageSeekBar = (SeekBar) findViewById(R.id.rageSeekBar);
+		rageSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+				TextView rageTextView = (TextView)findViewById(R.id.rageTextView);
+				rageTextView.setText(String.valueOf("Rage: " + progress));
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
 
 		soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
 		//sound = soundPool.load(this, R.raw.bassdrum1, 1);
