@@ -18,8 +18,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.Random;
 import java.util.Timer;
@@ -28,6 +30,9 @@ import java.util.TimerTask;
 public class Composer extends AppCompatActivity{
 
     private int currentBeat;
+
+    long last = 0;
+    long now, diff, entries, sum;
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     private double composerCheck; //stores a randomly-generated number for comparison
@@ -49,21 +54,21 @@ public class Composer extends AppCompatActivity{
 
 		tempoSeekBar = (SeekBar) findViewById(R.id.tempoSeekBar);
 		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
-				TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
-				tempoTextView.setText(String.valueOf("Tempo: " + tempoTransform(progress)));
-			}
+            public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+                TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
+                tempoTextView.setText(String.valueOf("Tempo: " + tempoTransform(progress)));
+            }
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
-			}
+            }
 
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
-			}
-		});
+            }
+        });
 
 		complexitySeekBar = (SeekBar) findViewById(R.id.complexitySeekBar);
 		complexitySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -85,21 +90,44 @@ public class Composer extends AppCompatActivity{
 
 		rageSeekBar = (SeekBar) findViewById(R.id.rageSeekBar);
 		rageSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
-				TextView rageTextView = (TextView)findViewById(R.id.rageTextView);
-				rageTextView.setText(String.valueOf("Rage: " + progress));
-			}
+            public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+                TextView rageTextView = (TextView) findViewById(R.id.rageTextView);
+                rageTextView.setText(String.valueOf("Rage: " + progress));
+            }
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
-			}
+            }
 
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
-			}
-		});
+            }
+        });
+
+        ToggleButton tapTempoButton = (ToggleButton)findViewById(R.id.tapTempoButton);
+        tapTempoButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final int BPM = 60000;
+                if (last == 0) {
+                    last = System.currentTimeMillis();
+                } else {
+                    now = System.currentTimeMillis();
+                    diff = now - last;
+
+                    int tapTempo = BPM / (int) diff;
+                    if (tapTempo <= 240 && tapTempo >= 60) {
+                        parameters[0] = tapTempo;
+                        TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
+                        tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
+                    }
+                    last = 0;
+                    now = 0;
+                }
+            }
+        });
+
 
 		soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
 		//sound = soundPool.load(this, R.raw.bassdrum1, 1);
@@ -125,7 +153,7 @@ public class Composer extends AppCompatActivity{
         currentMeasure = 1;
         parameters = new int[2];
 		sounds = new int[4];
-        parameters[0] = 120; //default tempo
+        parameters[0] = 60; //default tempo
         parameters[1] = 50; //default offbeat check
         isPlaying = false;
         randy = new Random();
@@ -230,7 +258,10 @@ public class Composer extends AppCompatActivity{
 		playPause();
 		//soundPool.play(sound,1,1,1,0,1);
 	}
-    
+
+
+
+
     /* helper Classes go here
      * 
      * Helper Class tempoTimer allows the composer to halt for the time in between beats
