@@ -1,4 +1,3 @@
-
 /**
  * The composer class runs through a loop that queues up sounds for playback by the performer
  * class. This class will run through an algorithm to decide which notes and sounds will be played
@@ -45,7 +44,7 @@ public class Composer extends AppCompatActivity{
 		setContentView(R.layout.activity_main);
 		new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "User"));
 
-		tempoSeekBar = (SeekBar) findViewById(R.id.seekBar);
+		tempoSeekBar = (SeekBar) findViewById(R.id.tempoSeekBar);
 		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
                 TextView tempoTextView = (TextView)findViewById(R.id.tempoTextView);

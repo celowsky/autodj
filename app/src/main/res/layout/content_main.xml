@@ -14,8 +14,8 @@
     <SeekBar
         android:layout_height="wrap_content"
         android:layout_width="200dp"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:paddingTop="40dp"
         android:max="90"
         android:id="@+id/tempoSeekBar" />
 
@@ -24,9 +24,46 @@
         android:text="Tempo: 60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
+        android:paddingTop="40dp"
+        android:layout_alignParentRight="true"
         android:id="@+id/tempoTextView" />
+
+    <SeekBar
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="40dp"
+        android:layout_below="@id/tempoSeekBar"
+        android:max="10"
+        android:id="@+id/complexitySeekBar" />
+
+
+    <TextView android:text="Complexity: 0" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:paddingTop="40dp"
+        android:layout_below="@id/tempoTextView"
+        android:id="@+id/complexityTextView" />
+
+    <SeekBar
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_centerHorizontal="true"
+        android:max="10"
+        android:paddingTop="40dp"
+        android:layout_below="@id/complexitySeekBar"
+        android:id="@+id/rageSeekBar" />
+
+
+    <TextView android:text="Rage: 0" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/complexityTextView"
+        android:id="@+id/rageTextView" />
 
 
     <Button
