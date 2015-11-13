@@ -76,14 +76,16 @@
         android:onClick="playPause"
         android:id="@+id/playButton" />
 
-    <ToggleButton
+    <Button
         android:layout_width="160dp"
         android:layout_height="100dp"
+        android:text="Tap Tempo"
+        android:onClick="clickTempo"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:textOff="Tap Tempo"
-        android:textOn="Tap Tempo"
         android:id="@+id/tapTempoButton" />
+
+
 
 
 </RelativeLayout>

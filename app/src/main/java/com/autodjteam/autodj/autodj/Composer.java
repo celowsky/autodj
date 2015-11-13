@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -90,46 +91,61 @@ public class Composer extends AppCompatActivity{
 
 		rageSeekBar = (SeekBar) findViewById(R.id.rageSeekBar);
 		rageSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
-                TextView rageTextView = (TextView) findViewById(R.id.rageTextView);
-                rageTextView.setText(String.valueOf("Rage: " + progress));
-            }
+			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
+				TextView rageTextView = (TextView) findViewById(R.id.rageTextView);
+				rageTextView.setText(String.valueOf("Rage: " + progress));
+			}
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+			}
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
+			}
+		});
 
-        ToggleButton tapTempoButton = (ToggleButton)findViewById(R.id.tapTempoButton);
-        tapTempoButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final int BPM = 60000;
-                if (last == 0) {
-                    last = System.currentTimeMillis();
-                } else {
-                    now = System.currentTimeMillis();
-                    diff = now - last;
+//        ToggleButton tapTempoButton = (ToggleButton)findViewById(R.id.tapTempoButton);
+//        tapTempoButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//				final int BPM = 60000;
+//				if (last == 0) {
+//					last = System.currentTimeMillis();
+//				} else {
+//					now = System.currentTimeMillis();
+//					diff = now - last;
+//
+//					int tapTempo = BPM / (int) diff;
+//
+//					if (tapTempo <= 240 && tapTempo >= 60) {
+//						//parameters[0] = tapTempo;
+//
+//						tempoSeekBar.setProgress((tapTempo - 60) / 2);
+//						TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
+//						tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
+//					}
+//					last = 0;
+//					now = 0;
+//				}
+//			}
+//		});
+//		XML for the above toggle button
+//		<ToggleButton
+//		android:layout_width="160dp"
+//		android:layout_height="100dp"
+//		android:layout_alignParentBottom="true"
+//		android:layout_alignParentRight="true"
+//		android:textOff="Tap Tempo"
+//		android:textOn="Tap Tempo"
+//		android:id="@+id/tapTempoButton" />
 
-                    int tapTempo = BPM / (int) diff;
 
-                    if (tapTempo <= 240 && tapTempo >= 60) {
-                        //parameters[0] = tapTempo;
 
-						tempoSeekBar.setProgress((tapTempo-60)/2);
-                        TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
-                        tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
-                    }
-                    last = 0;
-                    now = 0;
-                }
-            }
-        });
+
+
 
 
 		soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
@@ -148,6 +164,30 @@ public class Composer extends AppCompatActivity{
             }
         });*/
 	}
+
+
+
+	public void clickTempo(View v) {
+		final int BPM = 60000;
+		if (last == 0) {
+			last = System.currentTimeMillis();
+		} else {
+			now = System.currentTimeMillis();
+			diff = now - last;
+
+			int tapTempo = BPM / (int) diff;
+
+			if (tapTempo <= 240 && tapTempo >= 60) {
+				//parameters[0] = tapTempo;
+
+				tempoSeekBar.setProgress((tapTempo - 60) / 2);
+				TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
+				tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
+			}
+			last = now;
+		}
+	}
+
 
 
 
