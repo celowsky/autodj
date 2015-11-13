@@ -13,10 +13,9 @@
 
     <SeekBar
         android:layout_height="wrap_content"
-        android:layout_width="240dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="180dp"
         android:paddingTop="40dp"
-        android:paddingRight="52dp"
+        android:layout_marginLeft="40dp"
         android:max="90"
         android:id="@+id/tempoSeekBar" />
 
@@ -25,16 +24,15 @@
         android:text="Tempo: 60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="45dp"
+        android:paddingTop="40dp"
         android:layout_alignParentRight="true"
         android:id="@+id/tempoTextView" />
 
     <SeekBar
         android:layout_height="wrap_content"
-        android:layout_width="240dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="180dp"
         android:paddingTop="40dp"
-        android:paddingRight="52dp"
+        android:layout_marginLeft="40dp"
         android:layout_below="@id/tempoSeekBar"
         android:max="10"
         android:id="@+id/complexitySeekBar" />
@@ -45,16 +43,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:paddingTop="54dp"
+        android:paddingTop="40dp"
         android:layout_below="@id/tempoTextView"
         android:id="@+id/complexityTextView" />
 
     <SeekBar
         android:layout_height="wrap_content"
-        android:layout_width="240dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="180dp"
+
         android:max="10"
-        android:paddingRight="52dp"
+        android:layout_marginLeft="40dp"
         android:paddingTop="40dp"
         android:layout_below="@id/complexitySeekBar"
         android:id="@+id/rageSeekBar" />
@@ -64,7 +62,7 @@
         android:text="Rage: 0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="54dp"
+        android:paddingTop="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@id/complexityTextView"
         android:id="@+id/rageTextView" />
@@ -83,7 +81,8 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="Tap Tempo"
+        android:textOff="Tap Tempo"
+        android:textOn="Tap Tempo"
         android:id="@+id/tapTempoButton" />
 
 
