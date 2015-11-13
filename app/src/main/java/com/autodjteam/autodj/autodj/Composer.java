@@ -50,7 +50,7 @@ public class Composer extends AppCompatActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "User"));
+		//new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "User"));
 
 		tempoSeekBar = (SeekBar) findViewById(R.id.tempoSeekBar);
 		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -117,8 +117,11 @@ public class Composer extends AppCompatActivity{
                     diff = now - last;
 
                     int tapTempo = BPM / (int) diff;
+
                     if (tapTempo <= 240 && tapTempo >= 60) {
-                        parameters[0] = tapTempo;
+                        //parameters[0] = tapTempo;
+
+						tempoSeekBar.setProgress((tapTempo-60)/2);
                         TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
                         tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
                     }
@@ -242,6 +245,7 @@ public class Composer extends AppCompatActivity{
 		parameters[0]=tempoTransform(tempo);
     	//so: set parameters[0] (tempo parameter) equal to tempo slider's current value.
     }
+
     public int tempoTransform(int tempo){
 		return 2*tempo+60;
 	}
