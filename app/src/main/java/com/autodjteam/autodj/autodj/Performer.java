@@ -27,7 +27,7 @@ public class Performer {
 
     }
     public Performer(Context appContext){ //constructor for the SoundPlayback object
-        soundBank = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        soundBank = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         localContext = appContext;
     }
     //Methods

@@ -174,7 +174,8 @@ public class Composer extends AppCompatActivity{
 		} else {
 			now = System.currentTimeMillis();
 			diff = now - last;
-
+            if (diff == 0)
+                diff = 1;
 			int tapTempo = BPM / (int) diff;
 
 			if (tapTempo <= 240 && tapTempo >= 60) {
@@ -194,10 +195,11 @@ public class Composer extends AppCompatActivity{
     public Composer(){
         currentBeat = 1;
         currentMeasure = 1;
-        parameters = new int[2];
-		sounds = new int[4];
+        parameters = new int[3];
+		sounds = new int[10];
         parameters[0] = 60; //default tempo
-        parameters[1] = 50; //default offbeat check
+        parameters[1] = 5; //default complexity
+		parameters[2] = 1; //default rage
         isPlaying = false;
         randy = new Random();
 		//playback = new Performer();
@@ -212,6 +214,7 @@ public class Composer extends AppCompatActivity{
 		sounds[1] = soundPool.load(this, R.raw.snare1,1);
 		sounds[2] = soundPool.load(this, R.raw.hihat1,1);
 		sounds[3] = soundPool.load(this, R.raw.crash1,1);
+        sounds[4] = soundPool.load(this, R.raw.snare2,1);
 	}
 
 	public void play(int sound) {
@@ -236,19 +239,21 @@ public class Composer extends AppCompatActivity{
 			if ((currentBeat-1)%4 == 0){
 			    play(sounds[0]); //bass drum (four on the floor)
 			}
-			if ((currentBeat+1)%4 == 0 && composerCheck < parameters[1])
-				play(sounds[0]); //bass drum offbeats
-			
+			if ((currentBeat+1)%4 == 0 && composerCheck < parameters[1]*10)
+				play(sounds[0]); //bass drum extra beats
 			if ((currentBeat-1)%8 == 4){
-			    play(sounds[1]); //snare drum (ABSOLUTELY must play on "2 and 4!")
+			    play(sounds[4]); //snare drum (ABSOLUTELY must play on "2 and 4!")
 			}
 			
 			if (currentBeat%2 == 1)
 				play(sounds[2]); //hi-hat cymbal hits
 			
-			if (currentBeat%2 == 0 && (int) composerCheck < parameters[1]){
-			    play(sounds[1]); //offbeat snare hits, occuring infrequently
-			}
+			if (currentBeat%2 == 0 && composerCheck < parameters[1]*10) {
+                play(sounds[1]); //offbeat snare hits, occuring infrequently
+            }
+            else if (currentBeat%2 == 0 && composerCheck < parameters[1]*20) {
+                play(sounds[0]);
+            }
         }
         else 
         	fillCompose();
@@ -283,6 +288,8 @@ public class Composer extends AppCompatActivity{
     	//Method for changing parameters to current slider values goes here
 		int tempo = tempoSeekBar.getProgress();
 		parameters[0]=tempoTransform(tempo);
+        parameters[1]=complexitySeekBar.getProgress();
+        parameters[2]=rageSeekBar.getProgress();
     	//so: set parameters[0] (tempo parameter) equal to tempo slider's current value.
     }
 
