@@ -6,7 +6,7 @@ import android.media.SoundPool;
 
 /*Created Andrew Zaruba on 10/26/2015.
         *
-        *V1.0
+        *V1.1
         *
         *This
 
@@ -17,7 +17,7 @@ public class Performer {
     private Context localContext;
     private SoundPool soundBank; //this SoundPool holds all the sounds currently used by AutoDJ
     public Performer(){ //default constructor
-        soundBank = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        soundBank = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
         soundBank.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             public void onLoadComplete(SoundPool soundPool, int mySoundId, int status) {
 

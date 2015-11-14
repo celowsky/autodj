@@ -37,9 +37,11 @@ public class Composer extends AppCompatActivity{
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     private double composerCheck; //stores a randomly-generated number for comparison
+    private double chordChange; //stores a randomly-generated number for chord changes
     private Random randy;
     public int[] parameters; //array of composition parameters
-    public int[] sounds;
+    public int[] drums;
+    public int[] bass;
     public boolean isPlaying;
     //public Performer playback;
 	public SeekBar tempoSeekBar;
@@ -195,11 +197,14 @@ public class Composer extends AppCompatActivity{
     public Composer(){
         currentBeat = 1;
         currentMeasure = 1;
-        parameters = new int[3];
-		sounds = new int[10];
+        chordChange = 0;
+        parameters = new int[4];
+		drums = new int[10];
+        bass = new int[7];
         parameters[0] = 60; //default tempo
         parameters[1] = 5; //default complexity
 		parameters[2] = 1; //default rage
+		parameters[3] = 0; //default chord
         isPlaying = false;
         randy = new Random();
 		//playback = new Performer();
@@ -210,11 +215,19 @@ public class Composer extends AppCompatActivity{
 
     //loads all sounds in the library on startup
     public void onStartup(){
-		sounds[0] = soundPool.load(this, R.raw.bassdrum1, 1);
-		sounds[1] = soundPool.load(this, R.raw.snare1,1);
-		sounds[2] = soundPool.load(this, R.raw.hihat1,1);
-		sounds[3] = soundPool.load(this, R.raw.crash1,1);
-        sounds[4] = soundPool.load(this, R.raw.snare2,1);
+		drums[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
+        drums[1] = soundPool.load(this, R.raw.snare1,1);
+        drums[2] = soundPool.load(this, R.raw.hihat1,1);
+        drums[3] = soundPool.load(this, R.raw.crash1,1);
+        drums[4] = soundPool.load(this, R.raw.snare2,1);
+
+        bass[0] = soundPool.load(this, R.raw.bass1e,1);//bass sounds
+        bass[1] = soundPool.load(this, R.raw.bass1g,1);
+        bass[2] = soundPool.load(this, R.raw.bass1a,1);
+        bass[3] = soundPool.load(this, R.raw.bass1b,1);
+        bass[4] = soundPool.load(this, R.raw.bass1c,1);
+        bass[5] = soundPool.load(this, R.raw.bass1d,1);
+        bass[6] = soundPool.load(this, R.raw.bass2e,1);
 	}
 
 	public void play(int sound) {
@@ -231,32 +244,35 @@ public class Composer extends AppCompatActivity{
         }
         
         //Primary Drum composition
-        composerCheck = randy.nextDouble()*100 + 1;
+        if (currentMeasure%2 == 0) {
+            composerCheck = randy.nextDouble() * 100 + 1;
+        }
         if(currentMeasure == 1 && currentBeat == 1)
-        	play(sounds[3]); //cymbal crash after every fill because CLUB MUSIC.
+        	play(drums[3]); //cymbal crash after every fill because CLUB MUSIC.
         
         if (currentMeasure != 8) {
 			if ((currentBeat-1)%4 == 0){
-			    play(sounds[0]); //bass drum (four on the floor)
+			    play(drums[0]); //bass drum (four on the floor)
 			}
 			if ((currentBeat+1)%4 == 0 && composerCheck < parameters[1]*10)
-				play(sounds[0]); //bass drum extra beats
+				play(drums[0]); //bass drum extra beats
 			if ((currentBeat-1)%8 == 4){
-			    play(sounds[4]); //snare drum (ABSOLUTELY must play on "2 and 4!")
+			    play(drums[4]); //snare drum (ABSOLUTELY must play on "2 and 4!")
 			}
 			
 			if (currentBeat%2 == 1)
-				play(sounds[2]); //hi-hat cymbal hits
+				play(drums[2]); //hi-hat cymbal hits
 			
 			if (currentBeat%2 == 0 && composerCheck < parameters[1]*10) {
-                play(sounds[1]); //offbeat snare hits, occuring infrequently
+                play(drums[1]); //offbeat snare hits, occurring infrequently
             }
             else if (currentBeat%2 == 0 && composerCheck < parameters[1]*20) {
-                play(sounds[0]);
+                play(drums[0]);//offbeat bass drum hits, infrequent
             }
         }
         else 
         	fillCompose();
+        bassCompose();
 		if (currentBeat != 16) //checks to see what downbeat we are on
 	        currentBeat++;
 		else {
@@ -271,16 +287,50 @@ public class Composer extends AppCompatActivity{
     //Composes drum fills every eight measures for stylistic flair
     public void fillCompose(){
     	if (composerCheck > 50){ //50% chance to play this fill (NOTE: might be useful to make this a parameter)
-    		play(sounds[1]);
+    		play(drums[1]);
     		if ((currentBeat-1)%4 == 0)
-    			play(sounds[1]);
+    			play(drums[1]);
     	}
     	else { //50% chance to play this fill
     		if (((currentBeat+1)/2)%2 == 1)
-    			play(sounds[1]);
+    			play(drums[1]);
     		else
-    			play(sounds[0]);
+    			play(drums[0]);
     	}
+    }
+
+    //This method performs composition for the bass line
+    public void bassCompose(){
+        if (currentBeat == 1)
+            play(bass[parameters[3]]);
+        if (parameters[1] == 0) {
+            if ((currentBeat - 1) % 6 == 0)
+                play(bass[parameters[3]]);
+        }
+        if ((currentBeat-1)%4 == 0 && currentBeat != 1 && parameters[1] > 0 && parameters[1] < 3)
+            play(bass[parameters[3]]);
+        if (parameters[1] > 3 && parameters [1] < 7) {
+            if (currentBeat < 9 && (currentBeat - 1) % 3 == 0)
+                play(bass[parameters[3]]);
+            if (currentBeat >= 9 && currentBeat % 3 == 0)
+                play(bass[parameters[3]]);
+        }
+        if (parameters[1] > 7){
+            switch((currentBeat-1)%4){
+                case 0:
+                    if (composerCheck < 60)
+                        play(bass[parameters[3]]);
+                case 1:
+                    if (composerCheck < 10)
+                        play(bass[parameters[3]]);
+                case 2:
+                    if (composerCheck < 30)
+                        play(bass[parameters[3]]);
+                case 3:
+                    if (composerCheck < 20)
+                        play(bass[parameters[3]]);
+            }
+        }
     }
     
     //Updates composition parameters based on current slider values
@@ -290,6 +340,18 @@ public class Composer extends AppCompatActivity{
 		parameters[0]=tempoTransform(tempo);
         parameters[1]=complexitySeekBar.getProgress();
         parameters[2]=rageSeekBar.getProgress();
+
+        //sets up chord changes
+        if (parameters[1] < 5 && currentMeasure == 5)
+            parameters[3] = 0;
+        if (currentMeasure == 1)
+            parameters[3] = 0;
+        else {
+            chordChange = randy.nextDouble() * 100 + 1;
+            parameters[3] = ChangeChord();
+        }
+
+
     	//so: set parameters[0] (tempo parameter) equal to tempo slider's current value.
     }
 
@@ -305,6 +367,76 @@ public class Composer extends AppCompatActivity{
         	compose();
     }
 
+    public int ChangeChord(){
+        switch (parameters[3]) {
+            case 0:
+                if (chordChange < 60)
+                    return 3;
+                else if (chordChange < 80)
+                    return 4;
+                else if (chordChange < 90)
+                    return 5;
+                else
+                    return 1;
+            case 1:
+                if (chordChange < 50)
+                    return 5;
+                else if (chordChange < 80)
+                    return 2;
+                else
+                    return 4;
+            case 2:
+                if (chordChange < 40)
+                    return 3;
+                else if (chordChange < 70){
+                    if (composerCheck < 50)
+                        return 0;
+                    else
+                        return 6;
+                }
+                else if (chordChange < 90)
+                    return 5;
+            case 3:
+                if (chordChange < 60)
+                    return 4;
+                else if (chordChange < 90)
+                    return 2;
+                else {
+                    if (composerCheck < 50)
+                        return 0;
+                    else
+                        return 6;
+                }
+            case 4:
+                if (chordChange < 70)
+                    return 2;
+                if (chordChange < 90)
+                    return 3;
+                else
+                    return 5;
+            case 5:
+                if (chordChange < 50) {
+                    if (composerCheck < 50)
+                        return 0;
+                    else
+                        return 6;
+                }
+                else if (chordChange < 70)
+                    return 3;
+                else
+                    return 2;
+            case 6:
+                if (chordChange < 60)
+                    return 3;
+                else if (chordChange < 80)
+                    return 4;
+                else if (chordChange < 90)
+                    return 5;
+                else
+                    return 1;
+        }
+        return 0;
+    }
 	public void playPause(View view) {
 		playPause();
 		//soundPool.play(sound,1,1,1,0,1);
