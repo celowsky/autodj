@@ -37,11 +37,13 @@ public class Composer extends AppCompatActivity{
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     private double composerCheck; //stores a randomly-generated number for comparison
-    private double chordChange; //stores a randomly-generated number for chord changes
-    private Random randy;
+    private double restCheck; //stores a random number for lead composition
+    public Random randy;
+    public double chordChange; //stores a randomly-generated number for chord changes
     public int[] parameters; //array of composition parameters
     public int[] drums;
     public int[] bass;
+    public int[] lead;
     public boolean isPlaying;
     //public Performer playback;
 	public SeekBar tempoSeekBar;
@@ -150,7 +152,7 @@ public class Composer extends AppCompatActivity{
 
 
 
-		soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
+		soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC,0);
 		//sound = soundPool.load(this, R.raw.bassdrum1, 1);
 		onStartup();
 
@@ -198,13 +200,15 @@ public class Composer extends AppCompatActivity{
         currentBeat = 1;
         currentMeasure = 1;
         chordChange = 0;
-        parameters = new int[4];
+        parameters = new int[5];
 		drums = new int[10];
         bass = new int[7];
+        lead = new int[7];
         parameters[0] = 60; //default tempo
         parameters[1] = 5; //default complexity
 		parameters[2] = 1; //default rage
 		parameters[3] = 0; //default chord
+        parameters[4] = 0; //current lead note
         isPlaying = false;
         randy = new Random();
 		//playback = new Performer();
@@ -228,6 +232,14 @@ public class Composer extends AppCompatActivity{
         bass[4] = soundPool.load(this, R.raw.bass1c,1);
         bass[5] = soundPool.load(this, R.raw.bass1d,1);
         bass[6] = soundPool.load(this, R.raw.bass2e,1);
+
+        lead[0] = soundPool.load(this, R.raw.lead1e,1);//lead sounds
+        lead[1] = soundPool.load(this, R.raw.lead1g,1);
+        lead[2] = soundPool.load(this, R.raw.lead1a,1);
+        lead[3] = soundPool.load(this, R.raw.lead1b,1);
+        lead[4] = soundPool.load(this, R.raw.lead1d,1);
+        lead[5] = soundPool.load(this, R.raw.lead2e,1);
+        lead[6] = soundPool.load(this, R.raw.lead2g,1);
 	}
 
 	public void play(int sound) {
@@ -272,7 +284,15 @@ public class Composer extends AppCompatActivity{
         }
         else 
         	fillCompose();
+        if (parameters[1] < 2 && currentBeat == 1)
+            parameters[4] = ChangeNote();
+        else if (parameters[1] < 8 && currentBeat%2 == 1)
+            parameters[4] = ChangeNote();
+        else if (parameters[1] > 8)
+            parameters[4] = ChangeNote();
         bassCompose();
+        restCheck = randy.nextDouble()*100 + 1;
+        leadCompose();
 		if (currentBeat != 16) //checks to see what downbeat we are on
 	        currentBeat++;
 		else {
@@ -339,8 +359,10 @@ public class Composer extends AppCompatActivity{
 		int tempo = tempoSeekBar.getProgress();
 		parameters[0]=tempoTransform(tempo);
         parameters[1]=complexitySeekBar.getProgress();
-        parameters[2]=rageSeekBar.getProgress();
-
+        if (parameters[2] != rageSeekBar.getProgress()) {
+            parameters[2] = rageSeekBar.getProgress();
+            sampleChange();
+        }
         //sets up chord changes
         if (parameters[1] < 5 && currentMeasure == 5)
             parameters[3] = 0;
@@ -350,6 +372,7 @@ public class Composer extends AppCompatActivity{
             chordChange = randy.nextDouble() * 100 + 1;
             parameters[3] = ChangeChord();
         }
+
 
 
     	//so: set parameters[0] (tempo parameter) equal to tempo slider's current value.
@@ -396,6 +419,8 @@ public class Composer extends AppCompatActivity{
                 }
                 else if (chordChange < 90)
                     return 5;
+                else
+                    return 0;
             case 3:
                 if (chordChange < 60)
                     return 4;
@@ -436,6 +461,139 @@ public class Composer extends AppCompatActivity{
                     return 1;
         }
         return 0;
+    }
+
+    public int ChangeNote(){
+        switch(parameters[4]){
+            case 0:
+                if (chordChange < 50)
+                    return 1;
+                else
+                    return 2;
+            case 1:
+                if (chordChange < 50){
+                    if (composerCheck < 50)
+                        return 0;
+                    else
+                        return 2;
+                }
+                else
+                    return 3;
+            case 2:
+                if (chordChange < 50){
+                    if (composerCheck < 50)
+                        return 1;
+                    else
+                        return 3;
+                }
+                else {
+                    if (composerCheck < 50)
+                        return 0;
+                    else
+                        return 4;
+                }
+            case 3:
+                if (chordChange < 50){
+                    if (composerCheck < 50)
+                        return 2;
+                    else
+                        return 4;
+                }
+                else {
+                    if (composerCheck < 50)
+                        return 1;
+                    else
+                        return 5;
+                }
+            case 4:
+                if (chordChange < 50){
+                    if (composerCheck < 50)
+                        return 3;
+                    else
+                        return 5;
+                }
+                else {
+                    if (composerCheck < 50)
+                        return 2;
+                    else
+                        return 6;
+                }
+            case 5:
+                if (chordChange < 50){
+                    if (composerCheck < 50)
+                        return 4;
+                    else
+                        return 6;
+                }
+                else
+                    return 3;
+            case 6:
+                if (chordChange < 50)
+                    return 5;
+                else
+                    return 4;
+        }
+        return 0;
+    }
+
+    public void leadCompose() {
+        if (parameters[1] < 2) {
+            if (currentBeat == 1) {
+                play(lead[parameters[4]]);
+            }
+        } else if (parameters[1] < 9) {
+            if (currentBeat % 2 == 1) {
+                if (restCheck < 70)
+                    play(lead[parameters[4]]);
+            }
+        } else {
+            if (restCheck < 50)
+                play(lead[parameters[4]]);
+        }
+    }
+
+    public void sampleChange(){
+        if (parameters[2] > 5){
+            drums[0] = soundPool.load(this, R.raw.bassdrum2, 1);//drum sounds
+            drums[1] = soundPool.load(this, R.raw.snare3,1);
+            drums[2] = soundPool.load(this, R.raw.hihat2,1);
+            drums[3] = soundPool.load(this, R.raw.crash2,1);
+            drums[4] = soundPool.load(this, R.raw.snare4,1);
+        }
+        else {
+            drums[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
+            drums[1] = soundPool.load(this, R.raw.snare1,1);
+            drums[2] = soundPool.load(this, R.raw.hihat1,1);
+            drums[3] = soundPool.load(this, R.raw.crash1,1);
+            drums[4] = soundPool.load(this, R.raw.snare2,1);
+        }
+        if (parameters[2] < 3){
+            bass[0] = soundPool.load(this, R.raw.cbass1e,1);//bass sounds
+            bass[1] = soundPool.load(this, R.raw.cbass1g,1);
+            bass[2] = soundPool.load(this, R.raw.cbass1a,1);
+            bass[3] = soundPool.load(this, R.raw.cbass1b,1);
+            bass[4] = soundPool.load(this, R.raw.cbass1c,1);
+            bass[5] = soundPool.load(this, R.raw.cbass1d,1);
+            bass[6] = soundPool.load(this, R.raw.cbass2e,1);
+        }
+        else if (parameters[2] < 7){
+            bass[0] = soundPool.load(this, R.raw.bass1e,1);
+            bass[1] = soundPool.load(this, R.raw.bass1g,1);
+            bass[2] = soundPool.load(this, R.raw.bass1a,1);
+            bass[3] = soundPool.load(this, R.raw.bass1b,1);
+            bass[4] = soundPool.load(this, R.raw.bass1c,1);
+            bass[5] = soundPool.load(this, R.raw.bass1d,1);
+            bass[6] = soundPool.load(this, R.raw.bass2e,1);
+        }
+        else {
+            bass[0] = soundPool.load(this, R.raw.rbass1e,1);
+            bass[1] = soundPool.load(this, R.raw.rbass1g,1);
+            bass[2] = soundPool.load(this, R.raw.rbass1a,1);
+            bass[3] = soundPool.load(this, R.raw.rbass1b,1);
+            bass[4] = soundPool.load(this, R.raw.rbass1c,1);
+            bass[5] = soundPool.load(this, R.raw.rbass1d,1);
+            bass[6] = soundPool.load(this, R.raw.rbass2e,1);
+        }
     }
 	public void playPause(View view) {
 		playPause();
