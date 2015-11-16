@@ -20,7 +20,6 @@ public class ApplicationUnitTest {
     }
 
     @Test
-    //Testing to see that playPause correctly pauses music
     public void PlayPause() {
         composerUnderTest.isPlaying = true;
         composerUnderTest.playPause();
