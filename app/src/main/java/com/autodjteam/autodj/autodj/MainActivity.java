@@ -47,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         });*/
     }
 
-    play=(Button)findViewById(R.id.button3);
-    stop=(Button)findViewById(R.id.button2);
-    record=(Button)findViewById(R.id.button);
+    Button record=(Button)findViewById(R.id.button);
 
     stop.setEnabled(false);
     play.setEnabled(false);
