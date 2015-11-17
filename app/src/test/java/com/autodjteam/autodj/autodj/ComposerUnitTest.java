@@ -1,7 +1,14 @@
 package com.autodjteam.autodj.autodj;
 
 import org.junit.Test;
-
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Bundle;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import static org.junit.Assert.*;
 
 /**
@@ -11,11 +18,35 @@ public class ComposerUnitTest {
 
     private Composer composerUnderTest = new Composer();
 
+    @Test
+    //parameter update testing
+    public void testUpdate() throws Exception {
+        boolean passed = true;
+        composerUnderTest.updateParameters(60,0,1);
+        composerUnderTest.updateParameters(120,5,1);
+        try {
+            composerUnderTest.updateParameters(200, 9, 2);
+        } catch (Exception NullPointerException){
+            assertTrue(passed);
+        }
+        assertTrue(passed);
+    }
 
     @Test
-    //onCreate testing
-    public void testOnCreate() throws Exception {
-
+    public void testChanges(){
+        for (int i = 0; i < 100; i++){
+            for (int j = 0; j < 100; j++){
+                for (int k = 0; k < 7; k++){
+                    composerUnderTest.composerCheck = i;
+                    composerUnderTest.chordChange = j;
+                    composerUnderTest.parameters[3] = k;
+                    composerUnderTest.parameters[4] = k;
+                    composerUnderTest.ChangeChord();
+                    composerUnderTest.ChangeNote();
+                }
+            }
+        }
+        assertTrue(true);
     }
 
     @Test

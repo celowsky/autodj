@@ -3,8 +3,6 @@
     package="com.autodjteam.autodj.autodj" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +16,6 @@
             android:name=".Composer"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
-        <activity
-            android:name="com.autodj.audiocapture.MainActivity"
-            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,6 +1,6 @@
 /**
- * The composer class runs through a loop that queues up sounds for playback by the performer
- * class. This class will run through an algorithm to decide which notes and sounds will be played
+ * The composer class runs through a loop that queues up sounds for playback
+ * This class will run through an algorithm to decide which notes and sounds will be played
  * on the next beat
  *
  * NOTES FOR NEXT MEETING:
@@ -36,8 +36,7 @@ public class Composer extends AppCompatActivity{
     long now, diff, entries, sum;
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
-    private double composerCheck; //stores a randomly-generated number for comparison
-    private double restCheck; //stores a random number for lead composition
+    public double composerCheck; //stores a randomly-generated number for comparison
     public Random randy;
     public double chordChange; //stores a randomly-generated number for chord changes
     public int[] parameters; //array of composition parameters
@@ -45,7 +44,6 @@ public class Composer extends AppCompatActivity{
     public int[] bass;
     public int[] lead;
     public boolean isPlaying;
-    //public Performer playback;
 	public SeekBar tempoSeekBar;
 	public SeekBar complexitySeekBar;
 	public SeekBar rageSeekBar;
@@ -55,7 +53,6 @@ public class Composer extends AppCompatActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "User"));
 
 		tempoSeekBar = (SeekBar) findViewById(R.id.tempoSeekBar);
 		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -211,7 +208,6 @@ public class Composer extends AppCompatActivity{
         parameters[4] = 0; //current lead note
         isPlaying = false;
         randy = new Random();
-		//playback = new Performer();
 		//onStartup();
     }
 
@@ -251,8 +247,8 @@ public class Composer extends AppCompatActivity{
     	if (isPlaying) {
     		new TempoTimer(parameters[0]);
     	}
-        if (currentBeat == 1){ 
-        	updateParameters(); //if we are on the downbeat of a measure, update composition parameters
+        if (currentBeat == 1){  //if we are on the downbeat of a measure, update composition parameters
+        	updateParameters(tempoSeekBar.getProgress(), complexitySeekBar.getProgress(), rageSeekBar.getProgress());
         }
         
         //Primary Drum composition
@@ -291,7 +287,6 @@ public class Composer extends AppCompatActivity{
         else if (parameters[1] > 8)
             parameters[4] = ChangeNote();
         bassCompose();
-        restCheck = randy.nextDouble()*100 + 1;
         leadCompose();
 		if (currentBeat != 16) //checks to see what downbeat we are on
 	        currentBeat++;
@@ -354,13 +349,12 @@ public class Composer extends AppCompatActivity{
     }
     
     //Updates composition parameters based on current slider values
-    public void updateParameters () {
+    public void updateParameters (int temp, int comp, int rage) {
     	//Method for changing parameters to current slider values goes here
-		int tempo = tempoSeekBar.getProgress();
-		parameters[0]=tempoTransform(tempo);
-        parameters[1]=complexitySeekBar.getProgress();
-        if (parameters[2] != rageSeekBar.getProgress()) {
-            parameters[2] = rageSeekBar.getProgress();
+		parameters[0]=tempoTransform(temp);
+        parameters[1]=comp;
+        if (parameters[2] != rage) {
+            parameters[2] = rage;
             sampleChange();
         }
         //sets up chord changes
@@ -464,6 +458,7 @@ public class Composer extends AppCompatActivity{
     }
 
     public int ChangeNote(){
+        chordChange = randy.nextDouble()*100 + 1;
         switch(parameters[4]){
             case 0:
                 if (chordChange < 50)
@@ -536,18 +531,19 @@ public class Composer extends AppCompatActivity{
         return 0;
     }
 
-    public void leadCompose() {
-        if (parameters[1] < 2) {
-            if (currentBeat == 1) {
+    public void leadCompose(){
+        if (parameters[1] < 2){
+            if (currentBeat == 1)
                 play(lead[parameters[4]]);
-            }
-        } else if (parameters[1] < 9) {
-            if (currentBeat % 2 == 1) {
-                if (restCheck < 70)
+        }
+        else if (parameters[1] < 9){
+            if (currentBeat%2 == 1){
+                if (composerCheck > 30)
                     play(lead[parameters[4]]);
             }
-        } else {
-            if (restCheck < 50)
+        }
+        else {
+            if (composerCheck > 30)
                 play(lead[parameters[4]]);
         }
     }
