@@ -1,14 +1,6 @@
 package com.autodjteam.autodj.autodj;
 
 import org.junit.Test;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Bundle;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import static org.junit.Assert.*;
 
 /**
