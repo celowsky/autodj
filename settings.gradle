@@ -1,1 +1,1 @@
-include ':app', ':databaseBackend'
+include ':app', ':databaseBackend', ':autodjmod'

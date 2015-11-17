@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/autodj.iml" filepath="$PROJECT_DIR$/autodj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/autodjmod/autodjmod.iml" filepath="$PROJECT_DIR$/autodjmod/autodjmod.iml" />
       <module fileurl="file://$PROJECT_DIR$/databaseBackend/databaseBackend.iml" filepath="$PROJECT_DIR$/databaseBackend/databaseBackend.iml" />
     </modules>
   </component>
