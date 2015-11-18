@@ -33,7 +33,7 @@ public class Composer extends AppCompatActivity{
     private int currentBeat;
 
     long last = 0;
-    long now, diff, entries, sum;
+    long now, diff, entries, susm;
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     public double composerCheck; //stores a randomly-generated number for comparison
@@ -381,7 +381,7 @@ public class Composer extends AppCompatActivity{
     public void playPause(){
     	isPlaying = !isPlaying;
         if (isPlaying)
-        	compose();
+                compose();
     }
 
     public int ChangeChord(){
