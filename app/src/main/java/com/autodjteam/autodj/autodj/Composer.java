@@ -3,11 +3,6 @@
  * This class will run through an algorithm to decide which notes and sounds will be played
  * on the next beat
  *
- * NOTES FOR NEXT MEETING:
- *
- *     LOADING SOUNDS: time how long startup takes when loading each sound individually
- *     using raw commands. If it takes a while, try storing each of the file ids in an
- *     array and using that instead!
  */
 package com.autodjteam.autodj.autodj;
 
@@ -40,7 +35,10 @@ public class Composer extends AppCompatActivity{
     public Random randy;
     public double chordChange; //stores a randomly-generated number for chord changes
     public int[] parameters; //array of composition parameters
-    public int[] drums;
+    public int[] drumsMaster; //master arrays containing all sounds
+    public int[] bassMaster;
+    public int[] leadMaster;
+    public int[] drums; //active arrays
     public int[] bass;
     public int[] lead;
     public boolean isPlaying;
@@ -197,8 +195,11 @@ public class Composer extends AppCompatActivity{
         currentBeat = 1;
         currentMeasure = 1;
         chordChange = 0;
-        parameters = new int[5];
-		drums = new int[10];
+        parameters = new int[6];
+        drumsMaster = new int[10];
+        bassMaster = new int[21];
+        leadMaster = new int[7];
+		drums = new int[5];
         bass = new int[7];
         lead = new int[7];
         parameters[0] = 60; //default tempo
@@ -206,6 +207,7 @@ public class Composer extends AppCompatActivity{
 		parameters[2] = 1; //default rage
 		parameters[3] = 0; //default chord
         parameters[4] = 0; //current lead note
+        parameters[5] = 0; //current melodyChecker
         isPlaying = false;
         randy = new Random();
 		//onStartup();
@@ -215,28 +217,57 @@ public class Composer extends AppCompatActivity{
 
     //loads all sounds in the library on startup
     public void onStartup(){
-		drums[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
-        drums[1] = soundPool.load(this, R.raw.snare1,1);
-        drums[2] = soundPool.load(this, R.raw.hihat1,1);
-        drums[3] = soundPool.load(this, R.raw.crash1,1);
-        drums[4] = soundPool.load(this, R.raw.snare2,1);
-
-        bass[0] = soundPool.load(this, R.raw.bass1e,1);//bass sounds
-        bass[1] = soundPool.load(this, R.raw.bass1g,1);
-        bass[2] = soundPool.load(this, R.raw.bass1a,1);
-        bass[3] = soundPool.load(this, R.raw.bass1b,1);
-        bass[4] = soundPool.load(this, R.raw.bass1c,1);
-        bass[5] = soundPool.load(this, R.raw.bass1d,1);
-        bass[6] = soundPool.load(this, R.raw.bass2e,1);
-
-        lead[0] = soundPool.load(this, R.raw.lead1e,1);//lead sounds
-        lead[1] = soundPool.load(this, R.raw.lead1g,1);
-        lead[2] = soundPool.load(this, R.raw.lead1a,1);
-        lead[3] = soundPool.load(this, R.raw.lead1b,1);
-        lead[4] = soundPool.load(this, R.raw.lead1d,1);
-        lead[5] = soundPool.load(this, R.raw.lead2e,1);
-        lead[6] = soundPool.load(this, R.raw.lead2g,1);
+        soundLoad();
+		for (int i = 0; i < 7; i++){
+            if (i < 5)
+                drums[i] = drumsMaster[i];
+            bass[i] = bassMaster[i];
+            lead[i] = leadMaster[i];
+        }
 	}
+
+    public void soundLoad(){
+        bassMaster[0] = soundPool.load(this, R.raw.cbass1e,1);
+        bassMaster[1] = soundPool.load(this, R.raw.cbass1g,1);
+        bassMaster[2] = soundPool.load(this, R.raw.cbass1a,1);
+        bassMaster[3] = soundPool.load(this, R.raw.cbass1b,1);
+        bassMaster[4] = soundPool.load(this, R.raw.cbass1c,1);
+        bassMaster[5] = soundPool.load(this, R.raw.cbass1d,1);
+        bassMaster[6] = soundPool.load(this, R.raw.cbass2e,1);
+        bassMaster[7] = soundPool.load(this, R.raw.bass1e,1);
+        bassMaster[8] = soundPool.load(this, R.raw.bass1g,1);
+        bassMaster[9] = soundPool.load(this, R.raw.bass1a,1);
+        bassMaster[10] = soundPool.load(this, R.raw.bass1b,1);
+        bassMaster[11] = soundPool.load(this, R.raw.bass1c,1);
+        bassMaster[12] = soundPool.load(this, R.raw.bass1d,1);
+        bassMaster[13] = soundPool.load(this, R.raw.bass2e,1);
+        bassMaster[14] = soundPool.load(this, R.raw.rbass1e,1);
+        bassMaster[15] = soundPool.load(this, R.raw.rbass1g,1);
+        bassMaster[16] = soundPool.load(this, R.raw.rbass1a,1);
+        bassMaster[17] = soundPool.load(this, R.raw.rbass1b,1);
+        bassMaster[18] = soundPool.load(this, R.raw.rbass1c,1);
+        bassMaster[19] = soundPool.load(this, R.raw.rbass1d,1);
+        bassMaster[20] = soundPool.load(this, R.raw.rbass2e,1);
+
+        drumsMaster[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
+        drumsMaster[1] = soundPool.load(this, R.raw.snare1,1);
+        drumsMaster[2] = soundPool.load(this, R.raw.hihat1,1);
+        drumsMaster[3] = soundPool.load(this, R.raw.crash1,1);
+        drumsMaster[4] = soundPool.load(this, R.raw.snare2,1);
+        drumsMaster[5] = soundPool.load(this, R.raw.bassdrum2, 1);//drum sounds
+        drumsMaster[6] = soundPool.load(this, R.raw.snare3,1);
+        drumsMaster[7] = soundPool.load(this, R.raw.hihat2,1);
+        drumsMaster[8] = soundPool.load(this, R.raw.crash2,1);
+        drumsMaster[9] = soundPool.load(this, R.raw.snare4,1);
+
+        leadMaster[0] = soundPool.load(this, R.raw.lead1e,1);//lead sounds
+        leadMaster[1] = soundPool.load(this, R.raw.lead1g,1);
+        leadMaster[2] = soundPool.load(this, R.raw.lead1a,1);
+        leadMaster[3] = soundPool.load(this, R.raw.lead1b,1);
+        leadMaster[4] = soundPool.load(this, R.raw.lead1d,1);
+        leadMaster[5] = soundPool.load(this, R.raw.lead2e,1);
+        leadMaster[6] = soundPool.load(this, R.raw.lead2g,1);
+    }
 
 	public void play(int sound) {
 		soundPool.play(sound, 1, 1, 1, 0, 1);
@@ -262,20 +293,26 @@ public class Composer extends AppCompatActivity{
 			if ((currentBeat-1)%4 == 0){
 			    play(drums[0]); //bass drum (four on the floor)
 			}
-			if ((currentBeat+1)%4 == 0 && composerCheck < parameters[1]*10)
+			if ((currentBeat+1)%4 == 0 && composerCheck < parameters[1]*6 && parameters[1] != 10)
 				play(drums[0]); //bass drum extra beats
 			if ((currentBeat-1)%8 == 4){
 			    play(drums[4]); //snare drum (ABSOLUTELY must play on "2 and 4!")
 			}
-			
+			composerCheck = randy.nextDouble() * 100 + 1;
 			if (currentBeat%2 == 1)
 				play(drums[2]); //hi-hat cymbal hits
 			
-			if (currentBeat%2 == 0 && composerCheck < parameters[1]*10) {
+			if (currentBeat%2 == 0 && composerCheck < parameters[1]*10 && parameters[1] != 10) {
                 play(drums[1]); //offbeat snare hits, occurring infrequently
             }
-            else if (currentBeat%2 == 0 && composerCheck < parameters[1]*20) {
+            else if (currentBeat%2 == 0 && composerCheck < parameters[1]*4  && parameters[1] != 10) {
                 play(drums[0]);//offbeat bass drum hits, infrequent
+            }
+            else if (parameters[1] == 10){
+                if (composerCheck > randy.nextDouble() * 100 + 1)
+                    play(drums[0]);
+                else if (composerCheck < randy.nextDouble() * 100 + 1)
+                    play(drums[1]);
             }
         }
         else 
@@ -532,63 +569,54 @@ public class Composer extends AppCompatActivity{
     }
 
     public void leadCompose(){
-        if (parameters[1] < 2){
-            if (currentBeat == 1)
+        if (parameters[1] < 2 && composerCheck > parameters[5]*20){
+            if (currentBeat == 1) {
                 play(lead[parameters[4]]);
-        }
-        else if (parameters[1] < 9){
-            if (currentBeat%2 == 1){
-                if (composerCheck > 30)
-                    play(lead[parameters[4]]);
+                parameters[5]++;
             }
         }
-        else {
-            if (composerCheck > 30)
+        else if (parameters[1] < 9 && composerCheck > parameters[5]*20){
+            if (currentBeat%2 == 1){
+                if (composerCheck > 30) {
+                    play(lead[parameters[4]]);
+                    parameters[5]++;
+                }
+            }
+        }
+        else if (composerCheck > 30 && composerCheck > parameters[5]*20) {
                 play(lead[parameters[4]]);
+                parameters[5]++;
+        }
+        else {
+            parameters[5] = 0;
+        }
+        if (parameters[5] == 6){
+            parameters[5] = 0;
         }
     }
 
     public void sampleChange(){
-        if (parameters[2] > 5){
-            drums[0] = soundPool.load(this, R.raw.bassdrum2, 1);//drum sounds
-            drums[1] = soundPool.load(this, R.raw.snare3,1);
-            drums[2] = soundPool.load(this, R.raw.hihat2,1);
-            drums[3] = soundPool.load(this, R.raw.crash2,1);
-            drums[4] = soundPool.load(this, R.raw.snare4,1);
+        if (parameters[2] < 5){
+            for (int i = 0; i < 5; i++){
+                drums[i] = drumsMaster[i];
+            }
         }
         else {
-            drums[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
-            drums[1] = soundPool.load(this, R.raw.snare1,1);
-            drums[2] = soundPool.load(this, R.raw.hihat1,1);
-            drums[3] = soundPool.load(this, R.raw.crash1,1);
-            drums[4] = soundPool.load(this, R.raw.snare2,1);
+            for (int i = 0; i < 5; i++){
+                drums[i] = drumsMaster[i+5];
+            }
         }
         if (parameters[2] < 3){
-            bass[0] = soundPool.load(this, R.raw.cbass1e,1);//bass sounds
-            bass[1] = soundPool.load(this, R.raw.cbass1g,1);
-            bass[2] = soundPool.load(this, R.raw.cbass1a,1);
-            bass[3] = soundPool.load(this, R.raw.cbass1b,1);
-            bass[4] = soundPool.load(this, R.raw.cbass1c,1);
-            bass[5] = soundPool.load(this, R.raw.cbass1d,1);
-            bass[6] = soundPool.load(this, R.raw.cbass2e,1);
+            for (int i = 0; i < 7; i++)
+                bass[i] = bassMaster[i];
         }
         else if (parameters[2] < 7){
-            bass[0] = soundPool.load(this, R.raw.bass1e,1);
-            bass[1] = soundPool.load(this, R.raw.bass1g,1);
-            bass[2] = soundPool.load(this, R.raw.bass1a,1);
-            bass[3] = soundPool.load(this, R.raw.bass1b,1);
-            bass[4] = soundPool.load(this, R.raw.bass1c,1);
-            bass[5] = soundPool.load(this, R.raw.bass1d,1);
-            bass[6] = soundPool.load(this, R.raw.bass2e,1);
+            for (int i = 0; i < 7; i++)
+                bass[i] = bassMaster[i+7];
         }
         else {
-            bass[0] = soundPool.load(this, R.raw.rbass1e,1);
-            bass[1] = soundPool.load(this, R.raw.rbass1g,1);
-            bass[2] = soundPool.load(this, R.raw.rbass1a,1);
-            bass[3] = soundPool.load(this, R.raw.rbass1b,1);
-            bass[4] = soundPool.load(this, R.raw.rbass1c,1);
-            bass[5] = soundPool.load(this, R.raw.rbass1d,1);
-            bass[6] = soundPool.load(this, R.raw.rbass2e,1);
+            for (int i = 0; i < 7; i++)
+                bass[i] = bassMaster[i+14];
         }
     }
 	public void playPause(View view) {
