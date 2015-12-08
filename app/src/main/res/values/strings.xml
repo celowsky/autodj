@@ -2,4 +2,7 @@
     <string name="app_name">AutoDJ</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_composer">Composer</string>
+    <string name="Play">Play</string>
+    <string name="Pause">Pause</string>
 </resources>
+

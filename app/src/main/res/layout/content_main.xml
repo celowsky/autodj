@@ -68,11 +68,12 @@
         android:layout_below="@id/complexityTextView"
         android:id="@+id/rageTextView" />
 
-    <Button
+    <ToggleButton
         android:layout_width="160dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:text="Play"
+        android:textOff="PLAY"
+        android:textOn="PAUSE"
         android:background="@color/colorTrim2"
         android:onClick="playPause"
         android:id="@+id/playButton" />
