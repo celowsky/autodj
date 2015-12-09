@@ -111,7 +111,7 @@ public class Composer extends AppCompatActivity{
 
 			}
 		});
-
+         //This app is awesome
 		rageSeekBar = (SeekBar) findViewById(R.id.rageSeekBar);
 		rageSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			public void onProgressChanged(SeekBar mySeekBar, int progress, boolean fromUser) {
