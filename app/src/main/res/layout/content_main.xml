@@ -68,6 +68,15 @@
         android:layout_below="@id/complexityTextView"
         android:id="@+id/rageTextView" />
 
+    <Button
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:text="Record"
+        android:onClick="record"
+        android:background="@color/colorTrim1"
+        android:layout_marginTop="300dp"
+        android:id="@+id/recordButton" />
+
     <ToggleButton
         android:layout_width="160dp"
         android:layout_height="100dp"

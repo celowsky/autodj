@@ -7,20 +7,19 @@
 package com.autodjteam.autodj.autodj;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
+import java.io.IOException;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -61,6 +60,9 @@ public class Composer extends AppCompatActivity{
 	public SeekBar rageSeekBar;
 	public SoundPool soundPool;
     private ProgressDialog progressDialog;
+    public Button recordButton;
+    public MediaRecorder myAudioRecorder;
+    public String outputFile;
 
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +129,14 @@ public class Composer extends AppCompatActivity{
 
 			}
 		});
-        
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+
+        myAudioRecorder=new MediaRecorder();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFile(outputFile);
+
 		onStartup();
 	}
 
@@ -269,49 +278,6 @@ public class Composer extends AppCompatActivity{
         }
 	}
 
-
-//    public void soundLoad(){
-//        bassMaster[0] = soundPool.load(this, R.raw.cbass1e,1);
-//        bassMaster[1] = soundPool.load(this, R.raw.cbass1g,1);
-//        bassMaster[2] = soundPool.load(this, R.raw.cbass1a,1);
-//        bassMaster[3] = soundPool.load(this, R.raw.cbass1b,1);
-//        bassMaster[4] = soundPool.load(this, R.raw.cbass1c,1);
-//        bassMaster[5] = soundPool.load(this, R.raw.cbass1d,1);
-//        bassMaster[6] = soundPool.load(this, R.raw.cbass2e,1);
-//        bassMaster[7] = soundPool.load(this, R.raw.bass1e,1);
-//        bassMaster[8] = soundPool.load(this, R.raw.bass1g,1);
-//        bassMaster[9] = soundPool.load(this, R.raw.bass1a,1);
-//        bassMaster[10] = soundPool.load(this, R.raw.bass1b,1);
-//        bassMaster[11] = soundPool.load(this, R.raw.bass1c,1);
-//        bassMaster[12] = soundPool.load(this, R.raw.bass1d,1);
-//        bassMaster[13] = soundPool.load(this, R.raw.bass2e,1);
-//        bassMaster[14] = soundPool.load(this, R.raw.rbass1e,1);
-//        bassMaster[15] = soundPool.load(this, R.raw.rbass1g,1);
-//        bassMaster[16] = soundPool.load(this, R.raw.rbass1a,1);
-//        bassMaster[17] = soundPool.load(this, R.raw.rbass1b,1);
-//        bassMaster[18] = soundPool.load(this, R.raw.rbass1c,1);
-//        bassMaster[19] = soundPool.load(this, R.raw.rbass1d,1);
-//        bassMaster[20] = soundPool.load(this, R.raw.rbass2e,1);
-//
-//        drumsMaster[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
-//        drumsMaster[1] = soundPool.load(this, R.raw.snare1,1);
-//        drumsMaster[2] = soundPool.load(this, R.raw.hihat1,1);
-//        drumsMaster[3] = soundPool.load(this, R.raw.crash1,1);
-//        drumsMaster[4] = soundPool.load(this, R.raw.snare2,1);
-//        drumsMaster[5] = soundPool.load(this, R.raw.bassdrum2, 1);//drum sounds
-//        drumsMaster[6] = soundPool.load(this, R.raw.snare3,1);
-//        drumsMaster[7] = soundPool.load(this, R.raw.hihat2,1);
-//        drumsMaster[8] = soundPool.load(this, R.raw.crash2,1);
-//        drumsMaster[9] = soundPool.load(this, R.raw.snare4,1);
-//
-//        leadMaster[0] = soundPool.load(this, R.raw.lead1e,1);//lead sounds
-//        leadMaster[1] = soundPool.load(this, R.raw.lead1g,1);
-//        leadMaster[2] = soundPool.load(this, R.raw.lead1a,1);
-//        leadMaster[3] = soundPool.load(this, R.raw.lead1b,1);
-//        leadMaster[4] = soundPool.load(this, R.raw.lead1d,1);
-//        leadMaster[5] = soundPool.load(this, R.raw.lead2e,1);
-//        leadMaster[6] = soundPool.load(this, R.raw.lead2g,1);
-//    }
 
 	public void play(int sound) {
 		soundPool.play(sound, 1, 1, 1, 0, 1);
@@ -729,6 +695,39 @@ public class Composer extends AppCompatActivity{
                 timer.cancel();
             }
         }
+    }
+
+    public boolean isRecording = false;
+    public void record(View view) {
+        if(!isRecording) {
+            startRecording();
+            isRecording = true;
+        } else {
+            stopRecording();
+            isRecording = false;
+        }
+    }
+
+    public void startRecording() {
+        try {
+            myAudioRecorder.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        myAudioRecorder.start();
+    }
+
+    public void stopRecording() {
+        myAudioRecorder.stop();
+        myAudioRecorder.reset();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFile(outputFile);
+        //myAudioRecorder.release();
+        //myAudioRecorder = null;
     }
 
     private class LoadViewTask extends AsyncTask<Void, Integer, Void> {
