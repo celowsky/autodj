@@ -34,6 +34,8 @@ public class Composer extends AppCompatActivity{
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     public double composerCheck; //stores a randomly-generated number for comparison
+    public long hookCheck;
+    public int hookCount; //counts measures before repeating main melody
     public Random randy;
     public double chordChange; //stores a randomly-generated number for chord changes
     public int[] parameters; //array of composition parameters
@@ -44,6 +46,7 @@ public class Composer extends AppCompatActivity{
     public int[] bass;
     public int[] lead;
     public boolean isPlaying;
+    public boolean hook;
 	public SeekBar tempoSeekBar;
 	public SeekBar complexitySeekBar;
 	public SeekBar rageSeekBar;
@@ -205,6 +208,7 @@ public class Composer extends AppCompatActivity{
         currentBeat = 1;
         currentMeasure = 1;
         chordChange = 0;
+        hookCount = 1;
         parameters = new int[6];
 //        drumsMaster = new int[10];
 //        bassMaster = new int[21];
@@ -219,7 +223,9 @@ public class Composer extends AppCompatActivity{
         parameters[4] = 0; //current lead note
         parameters[5] = 0; //current melodyChecker
         isPlaying = false;
+        hook = true;
         randy = new Random();
+        hookCheck = randy.nextLong();
 		//onStartup();
     }
 
@@ -228,6 +234,13 @@ public class Composer extends AppCompatActivity{
     //loads all sounds in the library on startup
     public void onStartup(){
         //soundLoad();
+        leadMaster[0] = soundPool.load(Composer.this, R.raw.lead1e, 1);//lead sounds
+        leadMaster[1] = soundPool.load(Composer.this, R.raw.lead1g, 1);
+        leadMaster[2] = soundPool.load(Composer.this, R.raw.lead1a, 1);
+        leadMaster[3] = soundPool.load(Composer.this, R.raw.lead1b, 1);
+        leadMaster[4] = soundPool.load(Composer.this, R.raw.lead1d, 1);
+        leadMaster[5] = soundPool.load(Composer.this, R.raw.lead2e, 1);
+        leadMaster[6] = soundPool.load(Composer.this, R.raw.lead2g, 1);
 		for (int i = 0; i < 7; i++){
             if (i < 5)
                 drums[i] = drumsMaster[i];
@@ -291,6 +304,12 @@ public class Composer extends AppCompatActivity{
         if (currentBeat == 1){  //if we are on the downbeat of a measure, update composition parameters
         	updateParameters(tempoSeekBar.getProgress(), complexitySeekBar.getProgress(), rageSeekBar.getProgress());
         }
+        if (currentBeat == 1 && hook) {
+            randy = new Random(hookCheck);
+        }
+        else if (currentBeat == 1 && !hook)
+            randy = new Random();
+
         
         //Primary Drum composition
         if (currentMeasure%2 == 0) {
@@ -340,8 +359,20 @@ public class Composer extends AppCompatActivity{
 		else {
 		    if (currentMeasure != 8)
 		    	currentMeasure++;
-		    else
-		    	currentMeasure = 1;
+		    else {
+                if (hookCount == 1){ //goes from hook to improvisation
+                    hook = !hook;
+                    hookCount++;
+                }
+                else if (hookCount != 4) {
+                    hookCount++;
+                }
+                else {
+                    hook = !hook; //returns to hook from improvisation
+                    hookCount = 1;
+                }
+                currentMeasure = 1;
+            }
 	        currentBeat = 1;
 		}
 	}
@@ -689,6 +720,7 @@ public class Composer extends AppCompatActivity{
             try {
                 //Get the current thread's token
                 synchronized (this) {
+
                     drumsMaster[0] = soundPool.load(Composer.this, R.raw.bassdrum1, 1);//drum sounds
                     drumsMaster[1] = soundPool.load(Composer.this, R.raw.snare1, 1);
                     drumsMaster[2] = soundPool.load(Composer.this, R.raw.hihat1, 1);
@@ -699,21 +731,22 @@ public class Composer extends AppCompatActivity{
                     drumsMaster[7] = soundPool.load(Composer.this, R.raw.hihat2, 1);
                     drumsMaster[8] = soundPool.load(Composer.this, R.raw.crash2, 1);
                     drumsMaster[9] = soundPool.load(Composer.this, R.raw.snare4, 1);
-                    progressDialog.setProgress(25);
-                    bassMaster[0] = soundPool.load(Composer.this, R.raw.bass1e, 1);//bass sounds
-                    bassMaster[1] = soundPool.load(Composer.this, R.raw.bass1g, 1);
-                    bassMaster[2] = soundPool.load(Composer.this, R.raw.bass1a, 1);
-                    bassMaster[3] = soundPool.load(Composer.this, R.raw.bass1b, 1);
-                    bassMaster[4] = soundPool.load(Composer.this, R.raw.bass1c, 1);
-                    bassMaster[5] = soundPool.load(Composer.this, R.raw.bass1d, 1);
-                    bassMaster[6] = soundPool.load(Composer.this, R.raw.bass2e, 1);
-                    bassMaster[7] = soundPool.load(Composer.this, R.raw.cbass1e, 1);//bass sounds
-                    bassMaster[8] = soundPool.load(Composer.this, R.raw.cbass1g, 1);
-                    bassMaster[9] = soundPool.load(Composer.this, R.raw.cbass1a, 1);
-                    bassMaster[10] = soundPool.load(Composer.this, R.raw.cbass1b, 1);
-                    bassMaster[11] = soundPool.load(Composer.this, R.raw.cbass1c, 1);
-                    bassMaster[12] = soundPool.load(Composer.this, R.raw.cbass1d, 1);
-                    bassMaster[13] = soundPool.load(Composer.this, R.raw.cbass2e, 1);
+                    progressDialog.setProgress(40);
+                    bassMaster[0] = soundPool.load(Composer.this, R.raw.cbass1e, 1);//bass sounds
+                    bassMaster[1] = soundPool.load(Composer.this, R.raw.cbass1g, 1);
+                    bassMaster[2] = soundPool.load(Composer.this, R.raw.cbass1a, 1);
+                    bassMaster[3] = soundPool.load(Composer.this, R.raw.cbass1b, 1);
+                    bassMaster[4] = soundPool.load(Composer.this, R.raw.cbass1c, 1);
+                    bassMaster[5] = soundPool.load(Composer.this, R.raw.cbass1d, 1);
+                    bassMaster[6] = soundPool.load(Composer.this, R.raw.cbass2e, 1);
+                    bassMaster[7] = soundPool.load(Composer.this, R.raw.bass1e, 1);//bass sounds
+                    bassMaster[8] = soundPool.load(Composer.this, R.raw.bass1g, 1);
+                    bassMaster[9] = soundPool.load(Composer.this, R.raw.bass1a, 1);
+                    bassMaster[10] = soundPool.load(Composer.this, R.raw.bass1b, 1);
+                    bassMaster[11] = soundPool.load(Composer.this, R.raw.bass1c, 1);
+                    bassMaster[12] = soundPool.load(Composer.this, R.raw.bass1d, 1);
+                    bassMaster[13] = soundPool.load(Composer.this, R.raw.bass2e, 1);
+                    progressDialog.setProgress(80);
                     bassMaster[14] = soundPool.load(Composer.this, R.raw.rbass1e, 1);
                     bassMaster[15] = soundPool.load(Composer.this, R.raw.rbass1g, 1);
                     bassMaster[16] = soundPool.load(Composer.this, R.raw.rbass1a, 1);
@@ -721,14 +754,6 @@ public class Composer extends AppCompatActivity{
                     bassMaster[18] = soundPool.load(Composer.this, R.raw.rbass1c, 1);
                     bassMaster[19] = soundPool.load(Composer.this, R.raw.rbass1d, 1);
                     bassMaster[20] = soundPool.load(Composer.this, R.raw.rbass2e, 1);
-                    progressDialog.setProgress(75);
-                    leadMaster[0] = soundPool.load(Composer.this, R.raw.lead1e, 1);//lead sounds
-                    leadMaster[1] = soundPool.load(Composer.this, R.raw.lead1g, 1);
-                    leadMaster[2] = soundPool.load(Composer.this, R.raw.lead1a, 1);
-                    leadMaster[3] = soundPool.load(Composer.this, R.raw.lead1b, 1);
-                    leadMaster[4] = soundPool.load(Composer.this, R.raw.lead1d, 1);
-                    leadMaster[5] = soundPool.load(Composer.this, R.raw.lead2e, 1);
-                    leadMaster[6] = soundPool.load(Composer.this, R.raw.lead2g, 1);
                     progressDialog.setProgress(100);
                 }
             }
