@@ -324,12 +324,21 @@ public class Composer extends AppCompatActivity{
 			}
 			if ((currentBeat+1)%4 == 0 && composerCheck < parameters[1]*6 && parameters[1] != 10)
 				play(drums[0]); //bass drum extra beats
-			if ((currentBeat-1)%8 == 4){
-			    play(drums[4]); //snare drum (ABSOLUTELY must play on "2 and 4!")
+			if ((currentBeat-1)%8 == 4 && !hook){
+			        play(drums[4]); //snare drum (ABSOLUTELY must play on "2 and 4!")
 			}
+            if ((currentBeat-1)%16 == 8 && hook){
+                play(drums[4]); //snare drum half time for the hook
+            }
 			composerCheck = randy.nextDouble() * 100 + 1;
-			if (currentBeat%2 == 1)
-				play(drums[2]); //hi-hat cymbal hits
+            if (!hook) {
+                if (currentBeat % 2 == 1)
+                    play(drums[2]); //hi-hat cymbal hits
+            }
+            else {
+                if ((currentBeat-1)%8 == 4)
+                    play(drums[3]);
+            }
 			
 			if (currentBeat%2 == 0 && composerCheck < parameters[1]*10 && parameters[1] != 10) {
                 play(drums[1]); //offbeat snare hits, occurring infrequently
@@ -350,7 +359,7 @@ public class Composer extends AppCompatActivity{
             parameters[4] = ChangeNote();
         else if (parameters[1] < 8 && currentBeat%2 == 1)
             parameters[4] = ChangeNote();
-        else if (parameters[1] > 8)
+        else if (parameters[1] >= 8)
             parameters[4] = ChangeNote();
         bassCompose();
         leadCompose();
