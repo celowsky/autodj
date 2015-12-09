@@ -118,63 +118,8 @@ public class Composer extends AppCompatActivity{
 
 			}
 		});
-
-//        ToggleButton tapTempoButton = (ToggleButton)findViewById(R.id.tapTempoButton);
-//        tapTempoButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//
-//				final int BPM = 60000;
-//				if (last == 0) {
-//					last = System.currentTimeMillis();
-//				} else {
-//					now = System.currentTimeMillis();
-//					diff = now - last;
-//
-//					int tapTempo = BPM / (int) diff;
-//
-//					if (tapTempo <= 240 && tapTempo >= 60) {
-//						//parameters[0] = tapTempo;
-//
-//						tempoSeekBar.setProgress((tapTempo - 60) / 2);
-//						TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
-//						tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
-//					}
-//					last = 0;
-//					now = 0;
-//				}
-//			}
-//		});
-//		XML for the above toggle button
-//		<ToggleButton
-//		android:layout_width="160dp"
-//		android:layout_height="100dp"
-//		android:layout_alignParentBottom="true"
-//		android:layout_alignParentRight="true"
-//		android:textOff="Tap Tempo"
-//		android:textOn="Tap Tempo"
-//		android:id="@+id/tapTempoButton" />
-
-
-
-
-
-
-
-		soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC,0);
-		//sound = soundPool.load(this, R.raw.bassdrum1, 1);
+        
 		onStartup();
-
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 	}
 
 
@@ -248,6 +193,7 @@ public class Composer extends AppCompatActivity{
             lead[i] = leadMaster[i];
         }
 	}
+
 
 //    public void soundLoad(){
 //        bassMaster[0] = soundPool.load(this, R.raw.cbass1e,1);
@@ -673,6 +619,13 @@ public class Composer extends AppCompatActivity{
 		playPause();
 		//soundPool.play(sound,1,1,1,0,1);
 	}
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        soundPool.release();
+        this.finish();
+    }
 
 
 
