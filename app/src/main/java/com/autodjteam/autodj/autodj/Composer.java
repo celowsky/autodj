@@ -26,6 +26,8 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +37,7 @@ public class Composer extends AppCompatActivity{
     private int currentBeat;
 
     long last = 0;
+    String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
     long now, diff, entries, susm;
     
     public long[] saveData;
@@ -129,11 +132,12 @@ public class Composer extends AppCompatActivity{
 
 			}
 		});
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + currentDateTimeString + ".mp3";
 
         myAudioRecorder=new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         myAudioRecorder.setOutputFile(outputFile);
 
@@ -723,7 +727,7 @@ public class Composer extends AppCompatActivity{
         myAudioRecorder.stop();
         myAudioRecorder.reset();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         myAudioRecorder.setOutputFile(outputFile);
         //myAudioRecorder.release();
