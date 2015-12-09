@@ -70,31 +70,55 @@
 
     <Button
         android:layout_width="160dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Record"
         android:onClick="record"
-        android:background="@color/colorTrim1"
-        android:layout_marginTop="300dp"
+        android:background="@color/colorTrimPale1"
+        android:layout_above="@+id/playButton"
         android:id="@+id/recordButton" />
 
     <ToggleButton
-        android:layout_width="160dp"
+        android:layout_width="190dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
         android:textOff="PLAY"
         android:textOn="PAUSE"
-        android:background="@color/colorTrim2"
+        android:background="@color/temporart"
         android:onClick="playPause"
+        android:layout_marginTop="10dp"
         android:id="@+id/playButton" />
 
     <Button
         android:layout_width="160dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:text="Tap Tempo"
         android:onClick="clickTempo"
         android:background="@color/colorTrim1"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/playButton"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
         android:id="@+id/tapTempoButton" />
+
+    <Button
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:text="Save"
+        android:onClick="saveSeed"
+        android:background="@color/colorTrim2"
+        android:layout_above="@+id/tapTempoButton"
+        android:layout_alignParentRight="true"
+        android:id="@+id/saveSeed" />
+
+    <Button
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:text="Load"
+        android:onClick="loadSeed"
+        android:background="@color/colorTrimPale2"
+        android:layout_above="@+id/tapTempoButton"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/loadSeed" />
+
 
 </RelativeLayout>

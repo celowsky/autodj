@@ -165,7 +165,7 @@ public class Composer extends AppCompatActivity{
 	}
 
 
-    public void save() {
+    public void saveSeed(View v) {
         //write saveData to a single line in a file. this file will contain all the saves so far
         try {
             /*
@@ -191,7 +191,7 @@ public class Composer extends AppCompatActivity{
         }
     }
 
-    public void load() {
+    public void loadSeed(View v) {
         try {
             //currently uses the last line of the file
             //which happens to be the only line of the file because of save()
@@ -202,17 +202,17 @@ public class Composer extends AppCompatActivity{
             while((line = reader.readLine()) != null) {
                 params = line.split(" ");
 
-                tempoSeekBar.setProgress((Integer.parseInt(params[0]) - 60) / 2);
+                tempoSeekBar.setProgress((Integer.parseInt(params[1])));// - 60) / 2);
                 TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
-                tempoTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[0])));
+                tempoTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[1])));
 
-                complexitySeekBar.setProgress(Integer.parseInt(params[1]));
+                complexitySeekBar.setProgress(Integer.parseInt(params[2]));
                 TextView compTextView = (TextView) findViewById(R.id.complexityTextView);
-                compTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[1])));
+                compTextView.setText(String.valueOf("Complexity: " + Integer.parseInt(params[2])));
 
-                rageSeekBar.setProgress(Integer.parseInt(params[2]));
+                rageSeekBar.setProgress(Integer.parseInt(params[3]));
                 TextView rageTextView = (TextView) findViewById(R.id.rageTextView);
-                rageTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[2])));
+                rageTextView.setText(String.valueOf("Rage: " + Integer.parseInt(params[3])));
 
                 saveData[3] = Long.parseLong(params[3]);
                 randy.setSeed(saveData[3]);
