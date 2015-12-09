@@ -21,6 +21,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +37,9 @@ public class Composer extends AppCompatActivity{
 
     long last = 0;
     long now, diff, entries, susm;
+    
+    public long[] saveData;
+    public static final int saveSize=4;
 
     private int currentMeasure; //checks which measure we are in, for fill's sake.
     public double composerCheck; //stores a randomly-generated number for comparison
@@ -147,6 +156,65 @@ public class Composer extends AppCompatActivity{
 	}
 
 
+    public void save() {
+        //write saveData to a single line in a file. this file will contain all the saves so far
+        try {
+            /*
+                BufferedWriter appends to the end of a file.
+                It is the best solution that scales with size.
+                But for now it's just going to empty the file such that
+                the new save line currently written is the only line in the file.
+
+                This limits the save/load functionality to at most 1 save for now.
+             */
+            PrintWriter empty = new PrintWriter(new File(getApplicationContext().getFilesDir()+File.separator+"saves.txt"));
+            empty.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(getApplicationContext().getFilesDir()+File.separator+"saves.txt")));
+            for (int i=0;i<saveSize;i++) {
+                writer.write(saveData[i] + " ");
+            }
+            writer.write("\n");
+            writer.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        try {
+            //currently uses the last line of the file
+            //which happens to be the only line of the file because of save()
+            //if theres no save, it doesnt do anything
+            BufferedReader reader = new BufferedReader(new FileReader(new File(getApplicationContext().getFilesDir()+File.separator+"saves.txt")));
+            String line;
+            String[] params;
+            while((line = reader.readLine()) != null) {
+                params = line.split(" ");
+
+                tempoSeekBar.setProgress((Integer.parseInt(params[0]) - 60) / 2);
+                TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
+                tempoTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[0])));
+
+                complexitySeekBar.setProgress(Integer.parseInt(params[1]));
+                TextView compTextView = (TextView) findViewById(R.id.complexityTextView);
+                compTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[1])));
+
+                rageSeekBar.setProgress(Integer.parseInt(params[2]));
+                TextView rageTextView = (TextView) findViewById(R.id.rageTextView);
+                rageTextView.setText(String.valueOf("Tempo: " + Integer.parseInt(params[2])));
+
+                saveData[3] = Long.parseLong(params[3]);
+                randy.setSeed(saveData[3]);
+                //System.out.println("save loaded!!");
+            }
+            reader.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public Composer(){
@@ -169,7 +237,14 @@ public class Composer extends AppCompatActivity{
         parameters[5] = 0; //current melodyChecker
         isPlaying = false;
         hook = true;
-        randy = new Random();
+        
+        saveData = new long[saveSize];
+        saveData[0] = parameters[0];
+        saveData[1] = parameters[1];
+        saveData[2] = parameters[2];
+        saveData[3] = System.currentTimeMillis();
+
+        randy = new Random(saveData[3]);
         hookCheck = randy.nextLong();
 		//onStartup();
     }
@@ -400,7 +475,10 @@ public class Composer extends AppCompatActivity{
             parameters[3] = ChangeChord();
         }
 
-
+        //update parameters for saveData
+        saveData[1]=parameters[0]; //tempo
+        saveData[2]=parameters[1]; //complexity
+        saveData[3]=parameters[2]; //rage
 
     	//so: set parameters[0] (tempo parameter) equal to tempo slider's current value.
     }
