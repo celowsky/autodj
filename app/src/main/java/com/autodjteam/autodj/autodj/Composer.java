@@ -6,6 +6,7 @@
  */
 package com.autodjteam.autodj.autodj;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.media.AudioManager;
@@ -48,7 +49,7 @@ public class Composer extends AppCompatActivity{
 	public SeekBar complexitySeekBar;
 	public SeekBar rageSeekBar;
 	public SoundPool soundPool;
-    private ProgressDialog progressDialog;
+    public ProgressDialog progressDialog;
 
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,11 @@ public class Composer extends AppCompatActivity{
 		setContentView(R.layout.activity_main);
 
         soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC, 0);
-        drumsMaster = new int[10];
-        bassMaster = new int[21];
-        leadMaster = new int[7];
-
-        new LoadViewTask().execute();
+//        drumsMaster = new int[10];
+//        bassMaster = new int[21];
+//        leadMaster = new int[7];
+//
+//        new LoadViewTask().execute();
 
 		tempoSeekBar = (SeekBar) findViewById(R.id.tempoSeekBar);
 		tempoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -115,63 +116,8 @@ public class Composer extends AppCompatActivity{
 
 			}
 		});
-
-//        ToggleButton tapTempoButton = (ToggleButton)findViewById(R.id.tapTempoButton);
-//        tapTempoButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//
-//				final int BPM = 60000;
-//				if (last == 0) {
-//					last = System.currentTimeMillis();
-//				} else {
-//					now = System.currentTimeMillis();
-//					diff = now - last;
-//
-//					int tapTempo = BPM / (int) diff;
-//
-//					if (tapTempo <= 240 && tapTempo >= 60) {
-//						//parameters[0] = tapTempo;
-//
-//						tempoSeekBar.setProgress((tapTempo - 60) / 2);
-//						TextView tempoTextView = (TextView) findViewById(R.id.tempoTextView);
-//						tempoTextView.setText(String.valueOf("Tempo: " + tapTempo));
-//					}
-//					last = 0;
-//					now = 0;
-//				}
-//			}
-//		});
-//		XML for the above toggle button
-//		<ToggleButton
-//		android:layout_width="160dp"
-//		android:layout_height="100dp"
-//		android:layout_alignParentBottom="true"
-//		android:layout_alignParentRight="true"
-//		android:textOff="Tap Tempo"
-//		android:textOn="Tap Tempo"
-//		android:id="@+id/tapTempoButton" />
-
-
-
-
-
-
-
-		soundPool = new SoundPool(20, AudioManager.STREAM_MUSIC,0);
-		//sound = soundPool.load(this, R.raw.bassdrum1, 1);
+        
 		onStartup();
-
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 	}
 
 
@@ -206,9 +152,9 @@ public class Composer extends AppCompatActivity{
         currentMeasure = 1;
         chordChange = 0;
         parameters = new int[6];
-//        drumsMaster = new int[10];
-//        bassMaster = new int[21];
-//        leadMaster = new int[7];
+        drumsMaster = new int[10];
+        bassMaster = new int[21];
+        leadMaster = new int[7];
 		drums = new int[5];
         bass = new int[7];
         lead = new int[7];
@@ -227,7 +173,7 @@ public class Composer extends AppCompatActivity{
 
     //loads all sounds in the library on startup
     public void onStartup(){
-        //soundLoad();
+        soundLoad();
 		for (int i = 0; i < 7; i++){
             if (i < 5)
                 drums[i] = drumsMaster[i];
@@ -236,48 +182,68 @@ public class Composer extends AppCompatActivity{
         }
 	}
 
-//    public void soundLoad(){
-//        bassMaster[0] = soundPool.load(this, R.raw.cbass1e,1);
-//        bassMaster[1] = soundPool.load(this, R.raw.cbass1g,1);
-//        bassMaster[2] = soundPool.load(this, R.raw.cbass1a,1);
-//        bassMaster[3] = soundPool.load(this, R.raw.cbass1b,1);
-//        bassMaster[4] = soundPool.load(this, R.raw.cbass1c,1);
-//        bassMaster[5] = soundPool.load(this, R.raw.cbass1d,1);
-//        bassMaster[6] = soundPool.load(this, R.raw.cbass2e,1);
-//        bassMaster[7] = soundPool.load(this, R.raw.bass1e,1);
-//        bassMaster[8] = soundPool.load(this, R.raw.bass1g,1);
-//        bassMaster[9] = soundPool.load(this, R.raw.bass1a,1);
-//        bassMaster[10] = soundPool.load(this, R.raw.bass1b,1);
-//        bassMaster[11] = soundPool.load(this, R.raw.bass1c,1);
-//        bassMaster[12] = soundPool.load(this, R.raw.bass1d,1);
-//        bassMaster[13] = soundPool.load(this, R.raw.bass2e,1);
-//        bassMaster[14] = soundPool.load(this, R.raw.rbass1e,1);
-//        bassMaster[15] = soundPool.load(this, R.raw.rbass1g,1);
-//        bassMaster[16] = soundPool.load(this, R.raw.rbass1a,1);
-//        bassMaster[17] = soundPool.load(this, R.raw.rbass1b,1);
-//        bassMaster[18] = soundPool.load(this, R.raw.rbass1c,1);
-//        bassMaster[19] = soundPool.load(this, R.raw.rbass1d,1);
-//        bassMaster[20] = soundPool.load(this, R.raw.rbass2e,1);
-//
-//        drumsMaster[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
-//        drumsMaster[1] = soundPool.load(this, R.raw.snare1,1);
-//        drumsMaster[2] = soundPool.load(this, R.raw.hihat1,1);
-//        drumsMaster[3] = soundPool.load(this, R.raw.crash1,1);
-//        drumsMaster[4] = soundPool.load(this, R.raw.snare2,1);
-//        drumsMaster[5] = soundPool.load(this, R.raw.bassdrum2, 1);//drum sounds
-//        drumsMaster[6] = soundPool.load(this, R.raw.snare3,1);
-//        drumsMaster[7] = soundPool.load(this, R.raw.hihat2,1);
-//        drumsMaster[8] = soundPool.load(this, R.raw.crash2,1);
-//        drumsMaster[9] = soundPool.load(this, R.raw.snare4,1);
-//
-//        leadMaster[0] = soundPool.load(this, R.raw.lead1e,1);//lead sounds
-//        leadMaster[1] = soundPool.load(this, R.raw.lead1g,1);
-//        leadMaster[2] = soundPool.load(this, R.raw.lead1a,1);
-//        leadMaster[3] = soundPool.load(this, R.raw.lead1b,1);
-//        leadMaster[4] = soundPool.load(this, R.raw.lead1d,1);
-//        leadMaster[5] = soundPool.load(this, R.raw.lead2e,1);
-//        leadMaster[6] = soundPool.load(this, R.raw.lead2g,1);
-//    }
+    public void soundLoad(){
+//        progressDialog = new ProgressDialog(Composer.this);
+//        //Set the progress dialog to display a horizontal progress bar
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//        //Set the dialog title to 'Loading...'
+//        progressDialog.setTitle("Loading...");
+//        //Set the dialog message to 'Loading application View, please wait...'
+//        progressDialog.setMessage("Loading sound files, please wait...");
+//        //This dialog can't be canceled by pressing the back key
+//        progressDialog.setCancelable(false);
+//        //This dialog isn't indeterminate
+//        progressDialog.setIndeterminate(false);
+//        //The maximum number of items is 100
+//        progressDialog.setMax(100);
+//        //Set the current progress to zero
+//        progressDialog.setProgress(0);
+//        //Display the progress dialog
+//        progressDialog.show();
+
+        bassMaster[0] = soundPool.load(this, R.raw.cbass1e,1);
+        bassMaster[1] = soundPool.load(this, R.raw.cbass1g,1);
+        bassMaster[2] = soundPool.load(this, R.raw.cbass1a,1);
+        bassMaster[3] = soundPool.load(this, R.raw.cbass1b,1);
+        bassMaster[4] = soundPool.load(this, R.raw.cbass1c,1);
+        bassMaster[5] = soundPool.load(this, R.raw.cbass1d,1);
+        bassMaster[6] = soundPool.load(this, R.raw.cbass2e,1);
+        bassMaster[7] = soundPool.load(this, R.raw.bass1e,1);
+        bassMaster[8] = soundPool.load(this, R.raw.bass1g,1);
+        bassMaster[9] = soundPool.load(this, R.raw.bass1a,1);
+        bassMaster[10] = soundPool.load(this, R.raw.bass1b,1);
+        bassMaster[11] = soundPool.load(this, R.raw.bass1c,1);
+        bassMaster[12] = soundPool.load(this, R.raw.bass1d,1);
+        bassMaster[13] = soundPool.load(this, R.raw.bass2e,1);
+        bassMaster[14] = soundPool.load(this, R.raw.rbass1e,1);
+        bassMaster[15] = soundPool.load(this, R.raw.rbass1g,1);
+        bassMaster[16] = soundPool.load(this, R.raw.rbass1a,1);
+        bassMaster[17] = soundPool.load(this, R.raw.rbass1b,1);
+        bassMaster[18] = soundPool.load(this, R.raw.rbass1c,1);
+        bassMaster[19] = soundPool.load(this, R.raw.rbass1d,1);
+        bassMaster[20] = soundPool.load(this, R.raw.rbass2e,1);
+        //progressDialog.setProgress(50);
+        drumsMaster[0] = soundPool.load(this, R.raw.bassdrum1, 1);//drum sounds
+        drumsMaster[1] = soundPool.load(this, R.raw.snare1,1);
+        drumsMaster[2] = soundPool.load(this, R.raw.hihat1,1);
+        drumsMaster[3] = soundPool.load(this, R.raw.crash1,1);
+        drumsMaster[4] = soundPool.load(this, R.raw.snare2,1);
+        drumsMaster[5] = soundPool.load(this, R.raw.bassdrum2, 1);//drum sounds
+        drumsMaster[6] = soundPool.load(this, R.raw.snare3,1);
+        drumsMaster[7] = soundPool.load(this, R.raw.hihat2,1);
+        drumsMaster[8] = soundPool.load(this, R.raw.crash2,1);
+        drumsMaster[9] = soundPool.load(this, R.raw.snare4,1);
+        //progressDialog.setProgress(75);
+        leadMaster[0] = soundPool.load(this, R.raw.lead1e,1);//lead sounds
+        leadMaster[1] = soundPool.load(this, R.raw.lead1g,1);
+        leadMaster[2] = soundPool.load(this, R.raw.lead1a,1);
+        leadMaster[3] = soundPool.load(this, R.raw.lead1b,1);
+        leadMaster[4] = soundPool.load(this, R.raw.lead1d,1);
+        leadMaster[5] = soundPool.load(this, R.raw.lead2e,1);
+        leadMaster[6] = soundPool.load(this, R.raw.lead2g,1);
+        //progressDialog.setProgress(100);
+        //progressDialog.dismiss();
+    }
 
 	public void play(int sound) {
 		soundPool.play(sound, 1, 1, 1, 0, 1);
@@ -634,8 +600,12 @@ public class Composer extends AppCompatActivity{
 		//soundPool.play(sound,1,1,1,0,1);
 	}
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        soundPool.release();
+        this.finish();
+    }
 
     /* helper Classes go here
      * 
@@ -660,96 +630,98 @@ public class Composer extends AppCompatActivity{
         }
     }
 
-    private class LoadViewTask extends AsyncTask<Void, Integer, Void> {
-        @Override
-        protected void onPreExecute() {
-            //Create a new progress dialog
-            progressDialog = new ProgressDialog(Composer.this);
-            //Set the progress dialog to display a horizontal progress bar
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            //Set the dialog title to 'Loading...'
-            progressDialog.setTitle("Loading...");
-            //Set the dialog message to 'Loading application View, please wait...'
-            progressDialog.setMessage("Loading application View, please wait...");
-            //This dialog can't be canceled by pressing the back key
-            progressDialog.setCancelable(false);
-            //This dialog isn't indeterminate
-            progressDialog.setIndeterminate(false);
-            //The maximum number of items is 100
-            progressDialog.setMax(100);
-            //Set the current progress to zero
-            progressDialog.setProgress(0);
-            //Display the progress dialog
-            progressDialog.show();
-        }
 
-        //The code to be executed in a background thread.
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                //Get the current thread's token
-                synchronized (this) {
-                    drumsMaster[0] = soundPool.load(Composer.this, R.raw.bassdrum1, 1);//drum sounds
-                    drumsMaster[1] = soundPool.load(Composer.this, R.raw.snare1, 1);
-                    drumsMaster[2] = soundPool.load(Composer.this, R.raw.hihat1, 1);
-                    drumsMaster[3] = soundPool.load(Composer.this, R.raw.crash1, 1);
-                    drumsMaster[4] = soundPool.load(Composer.this, R.raw.snare2, 1);
-                    drumsMaster[5] = soundPool.load(Composer.this, R.raw.bassdrum2, 1);//drum sounds
-                    drumsMaster[6] = soundPool.load(Composer.this, R.raw.snare3, 1);
-                    drumsMaster[7] = soundPool.load(Composer.this, R.raw.hihat2, 1);
-                    drumsMaster[8] = soundPool.load(Composer.this, R.raw.crash2, 1);
-                    drumsMaster[9] = soundPool.load(Composer.this, R.raw.snare4, 1);
-                    progressDialog.setProgress(25);
-                    bassMaster[0] = soundPool.load(Composer.this, R.raw.bass1e, 1);//bass sounds
-                    bassMaster[1] = soundPool.load(Composer.this, R.raw.bass1g, 1);
-                    bassMaster[2] = soundPool.load(Composer.this, R.raw.bass1a, 1);
-                    bassMaster[3] = soundPool.load(Composer.this, R.raw.bass1b, 1);
-                    bassMaster[4] = soundPool.load(Composer.this, R.raw.bass1c, 1);
-                    bassMaster[5] = soundPool.load(Composer.this, R.raw.bass1d, 1);
-                    bassMaster[6] = soundPool.load(Composer.this, R.raw.bass2e, 1);
-                    bassMaster[7] = soundPool.load(Composer.this, R.raw.cbass1e, 1);//bass sounds
-                    bassMaster[8] = soundPool.load(Composer.this, R.raw.cbass1g, 1);
-                    bassMaster[9] = soundPool.load(Composer.this, R.raw.cbass1a, 1);
-                    bassMaster[10] = soundPool.load(Composer.this, R.raw.cbass1b, 1);
-                    bassMaster[11] = soundPool.load(Composer.this, R.raw.cbass1c, 1);
-                    bassMaster[12] = soundPool.load(Composer.this, R.raw.cbass1d, 1);
-                    bassMaster[13] = soundPool.load(Composer.this, R.raw.cbass2e, 1);
-                    bassMaster[14] = soundPool.load(Composer.this, R.raw.rbass1e, 1);
-                    bassMaster[15] = soundPool.load(Composer.this, R.raw.rbass1g, 1);
-                    bassMaster[16] = soundPool.load(Composer.this, R.raw.rbass1a, 1);
-                    bassMaster[17] = soundPool.load(Composer.this, R.raw.rbass1b, 1);
-                    bassMaster[18] = soundPool.load(Composer.this, R.raw.rbass1c, 1);
-                    bassMaster[19] = soundPool.load(Composer.this, R.raw.rbass1d, 1);
-                    bassMaster[20] = soundPool.load(Composer.this, R.raw.rbass2e, 1);
-                    progressDialog.setProgress(75);
-                    leadMaster[0] = soundPool.load(Composer.this, R.raw.lead1e, 1);//lead sounds
-                    leadMaster[1] = soundPool.load(Composer.this, R.raw.lead1g, 1);
-                    leadMaster[2] = soundPool.load(Composer.this, R.raw.lead1a, 1);
-                    leadMaster[3] = soundPool.load(Composer.this, R.raw.lead1b, 1);
-                    leadMaster[4] = soundPool.load(Composer.this, R.raw.lead1d, 1);
-                    leadMaster[5] = soundPool.load(Composer.this, R.raw.lead2e, 1);
-                    leadMaster[6] = soundPool.load(Composer.this, R.raw.lead2g, 1);
-                    progressDialog.setProgress(100);
-                }
-            }
-            finally {
-                return null;
-            }
-
-        }
-
-        //Update the progress
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            //set the current progress of the progress dialog
-            progressDialog.setProgress(values[0]);
-        }
-
-        //after executing the code in the thread
-        @Override
-        protected void onPostExecute(Void result) {
-            //close the progress dialog
-            progressDialog.dismiss();
-        }
-    }
+//
+//    private class LoadViewTask extends AsyncTask<Void, Integer, Void> {
+//        @Override
+//        protected void onPreExecute() {
+//            //Create a new progress dialog
+//            progressDialog = new ProgressDialog(Composer.this);
+//            //Set the progress dialog to display a horizontal progress bar
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//            //Set the dialog title to 'Loading...'
+//            progressDialog.setTitle("Loading...");
+//            //Set the dialog message to 'Loading application View, please wait...'
+//            progressDialog.setMessage("Loading application View, please wait...");
+//            //This dialog can't be canceled by pressing the back key
+//            progressDialog.setCancelable(false);
+//            //This dialog isn't indeterminate
+//            progressDialog.setIndeterminate(false);
+//            //The maximum number of items is 100
+//            progressDialog.setMax(100);
+//            //Set the current progress to zero
+//            progressDialog.setProgress(0);
+//            //Display the progress dialog
+//            progressDialog.show();
+//        }
+//
+//        //The code to be executed in a background thread.
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            try {
+//                //Get the current thread's token
+//                synchronized (this) {
+//                    leadMaster[0] = soundPool.load(Composer.this, R.raw.lead1e, 1);//lead sounds
+//                    leadMaster[1] = soundPool.load(Composer.this, R.raw.lead1g, 1);
+//                    leadMaster[2] = soundPool.load(Composer.this, R.raw.lead1a, 1);
+//                    leadMaster[3] = soundPool.load(Composer.this, R.raw.lead1b, 1);
+//                    leadMaster[4] = soundPool.load(Composer.this, R.raw.lead1d, 1);
+//                    leadMaster[5] = soundPool.load(Composer.this, R.raw.lead2e, 1);
+//                    leadMaster[6] = soundPool.load(Composer.this, R.raw.lead2g, 1);
+//                    progressDialog.setProgress(25);
+//                    drumsMaster[0] = soundPool.load(Composer.this, R.raw.bassdrum1, 1);//drum sounds
+//                    drumsMaster[1] = soundPool.load(Composer.this, R.raw.snare1, 1);
+//                    drumsMaster[2] = soundPool.load(Composer.this, R.raw.hihat1, 1);
+//                    drumsMaster[3] = soundPool.load(Composer.this, R.raw.crash1, 1);
+//                    drumsMaster[4] = soundPool.load(Composer.this, R.raw.snare2, 1);
+//                    drumsMaster[5] = soundPool.load(Composer.this, R.raw.bassdrum2, 1);//drum sounds
+//                    drumsMaster[6] = soundPool.load(Composer.this, R.raw.snare3, 1);
+//                    drumsMaster[7] = soundPool.load(Composer.this, R.raw.hihat2, 1);
+//                    drumsMaster[8] = soundPool.load(Composer.this, R.raw.crash2, 1);
+//                    drumsMaster[9] = soundPool.load(Composer.this, R.raw.snare4, 1);
+//                    progressDialog.setProgress(75);
+//                    bassMaster[0] = soundPool.load(Composer.this, R.raw.bass1e, 1);//bass sounds
+//                    bassMaster[1] = soundPool.load(Composer.this, R.raw.bass1g, 1);
+//                    bassMaster[2] = soundPool.load(Composer.this, R.raw.bass1a, 1);
+//                    bassMaster[3] = soundPool.load(Composer.this, R.raw.bass1b, 1);
+//                    bassMaster[4] = soundPool.load(Composer.this, R.raw.bass1c, 1);
+//                    bassMaster[5] = soundPool.load(Composer.this, R.raw.bass1d, 1);
+//                    bassMaster[6] = soundPool.load(Composer.this, R.raw.bass2e, 1);
+//                    bassMaster[7] = soundPool.load(Composer.this, R.raw.cbass1e, 1);//bass sounds
+//                    bassMaster[8] = soundPool.load(Composer.this, R.raw.cbass1g, 1);
+//                    bassMaster[9] = soundPool.load(Composer.this, R.raw.cbass1a, 1);
+//                    bassMaster[10] = soundPool.load(Composer.this, R.raw.cbass1b, 1);
+//                    bassMaster[11] = soundPool.load(Composer.this, R.raw.cbass1c, 1);
+//                    bassMaster[12] = soundPool.load(Composer.this, R.raw.cbass1d, 1);
+//                    bassMaster[13] = soundPool.load(Composer.this, R.raw.cbass2e, 1);
+//                    bassMaster[14] = soundPool.load(Composer.this, R.raw.rbass1e, 1);
+//                    bassMaster[15] = soundPool.load(Composer.this, R.raw.rbass1g, 1);
+//                    bassMaster[16] = soundPool.load(Composer.this, R.raw.rbass1a, 1);
+//                    bassMaster[17] = soundPool.load(Composer.this, R.raw.rbass1b, 1);
+//                    bassMaster[18] = soundPool.load(Composer.this, R.raw.rbass1c, 1);
+//                    bassMaster[19] = soundPool.load(Composer.this, R.raw.rbass1d, 1);
+//                    bassMaster[20] = soundPool.load(Composer.this, R.raw.rbass2e, 1);
+//                    progressDialog.setProgress(100);
+//                }
+//            }
+//            finally {
+//                return null;
+//            }
+//
+//        }
+//
+//        //Update the progress
+//        @Override
+//        protected void onProgressUpdate(Integer... values) {
+//            //set the current progress of the progress dialog
+//            progressDialog.setProgress(values[0]);
+//        }
+//
+//        //after executing the code in the thread
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            //close the progress dialog
+//            progressDialog.dismiss();
+//        }
+//    }
 }
